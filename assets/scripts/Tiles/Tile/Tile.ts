@@ -1,8 +1,7 @@
-import { _decorator } from 'cc';
 import { TileType } from '../../enums/TileType';
 import { GameManager } from '../../GameManager';
 import { IPlayground } from '../../interfaces/playground';
-import { ITile, ITileGroup, ITileScheme } from '../../interfaces/tile';
+import { ITileGroup, ITileScheme, ITile } from '../../interfaces/tile';
 
 export class Tile implements ITile {
     public x: number = 0;
@@ -13,7 +12,7 @@ export class Tile implements ITile {
 
     public points: number = 0;
 
-    get name(): string {
+    get id(): string {
         return `x${this.x}_y${this.y}`;
     }
     get type(): string {

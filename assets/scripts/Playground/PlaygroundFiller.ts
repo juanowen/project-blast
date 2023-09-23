@@ -1,12 +1,12 @@
 import { _decorator, Component, Node } from 'cc';
 import { TileType } from '../enums/TileType';
-import { IPlayground } from '../interfaces/playground';
+import { IPlayground, IPlaygroundFiller } from '../interfaces/playground';
 import { ITile } from '../interfaces/tile';
 import { TileGenerator } from '../Tiles/TileGenerator';
 const { ccclass, property } = _decorator;
 
 @ccclass('PlaygroundFiller')
-export class PlaygroundFiller extends Component {
+export class PlaygroundFiller extends Component implements IPlaygroundFiller {
     @property({ type: TileGenerator })
     tileGenerator: TileGenerator = null;
 

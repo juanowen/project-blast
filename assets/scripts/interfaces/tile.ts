@@ -1,5 +1,6 @@
-import { Color, _decorator } from 'cc';
+import { _decorator } from 'cc';
 import { TileType } from '../enums/TileType';
+import { ITileTypeFactoryPair } from './game';
 import { IPlayground } from './playground';
 
 export interface ITile {
@@ -9,7 +10,7 @@ export interface ITile {
     tileType: TileType,
     group: ITileGroup,
 
-    name: string,
+    id: string,
     type: string,
 
     points: number,
@@ -17,19 +18,16 @@ export interface ITile {
     init(scheme: ITileScheme): void,
     collapse(playground: IPlayground, multiplier?: number): void
 }
-export interface IColorTile extends ITile {
-    colorType: number
-}
 export interface IBasicTile extends ITile {
+    colorType: number
 }
 
 export interface ITileScheme {
     tileType: TileType,
     points: number
 }
-export interface IColorTileScheme extends ITileScheme {
-    colorType: number,
-    renderColor: Color
+export interface IBasicTileScheme extends ITileScheme {
+    colorType: number
 }
 
 export interface ITileGroup {
@@ -41,15 +39,8 @@ export interface ITileGroup {
 }
 
 export interface ITileGenerator {
-    configs: ITileGeneratorConfig[],
+    configs: ITileTypeFactoryPair[],
 
-    generateTile(tileType: TileType, x: number, y: number): ITile
-}
-export interface ITileGeneratorConfig {
-    tileType: TileType,
-    factory: ITileFactory
-}
-export interface ITileFactory {
-    generateTile(): ITile
+    generateTile(tileType: TileType): ITile
 }
 

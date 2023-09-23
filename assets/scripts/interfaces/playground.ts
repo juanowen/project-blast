@@ -1,5 +1,5 @@
 import { _decorator } from 'cc';
-import { ITile, ITileGroup } from './tile';
+import { ITile, ITileGenerator, ITileGroup } from './tile';
 import { PlaygroundGroupsManager } from '../Playground/PlaygroundGroupsManager';
 import { PlaygroundFiller } from '../Playground/PlaygroundFiller';
 import { TileType } from '../enums/TileType';
@@ -7,12 +7,13 @@ import { TileType } from '../enums/TileType';
 export interface IPlayground {
     width: number,
     height: number,
-    filler: PlaygroundFiller,
+    filler: IPlaygroundFiller,
     tileMap: Map<string, ITile>
 
     addTile(tile: ITile, x: number, y: number): void
     deleteTile(tile: ITile): void,
     getTile(x: number, y: number): ITile, 
+    hasTile(tile: ITile): boolean, 
     clear(): void,
     refill(): void
 }
@@ -22,13 +23,13 @@ export interface IShufflePlayground extends IPlayground {
     shufflePlayground(): void
 }
 export interface IGroupPlayground extends IPlayground {
-    groupsManager: PlaygroundGroupsManager,
+    groupsManager: IPlaygroundGroupsManager,
 
     analyzeGroups(): void
 }
 
 export interface IPlaygroundFiller {
-    tileGenerator: number,
+    tileGenerator: ITileGenerator,
     init(playground: IPlayground): void,
     fillPlayground(): void,
     generateTile(tileType: TileType): ITile

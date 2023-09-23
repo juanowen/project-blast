@@ -1,9 +1,7 @@
 import { _decorator, Component, warn } from 'cc';
-import { IGroupPlayground, IPlayground, IShufflePlayground, IPlaygroundShuffler } from '../interfaces/playground';
+import { IGroupPlayground, IPlayground, IShufflePlayground } from '../interfaces/playground';
 import { ITile } from '../interfaces/tile';
 import { PlaygroundGroupsManager } from './PlaygroundGroupsManager';
-import { TileGenerator } from '../Tiles/TileGenerator';
-import { TileType } from '../enums/TileType';
 import { PlaygroundShuffler } from './PlaygroundShuffler';
 import { PlaygroundFiller } from './PlaygroundFiller';
 const { ccclass, property } = _decorator;
@@ -55,15 +53,19 @@ export class Playground extends Component implements IPlayground, IGroupPlaygrou
         tile.x = x;
         tile.y = y;
 
-        this._tileMap.set(tile.name, tile);
+        this._tileMap.set(tile.id, tile);
     }
 
     deleteTile(tile: ITile) {
-        this._tileMap.delete(tile.name);
+        this._tileMap.delete(tile.id);
     }
 
     getTile(x: number, y: number): ITile {
         return this._tileMap.get(`x${x}_y${y}`);
+    }
+
+    hasTile(tile: ITile): boolean {
+        return this._tileMap.has(tile.id);
     }
 
     clear() {
