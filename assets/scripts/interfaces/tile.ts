@@ -37,7 +37,8 @@ export interface ITileGroup {
     length: number,
 
     add(tile: ITile): void,
-    delete(tile: ITile) : void
+    delete(tile: ITile) : void,
+    concat(group: ITileGroup): void
 }
 
 export interface ITileGenerator {

@@ -16,10 +16,18 @@ export class TileGroup implements ITileGroup {
 
     add(tile: ITile) {
         this.tileSet.add(tile);
+        tile.group = this;
     }
 
     delete(tile: ITile) {
         this.tileSet.delete(tile);
+        tile.group = null;
+    }
+
+    concat(group: ITileGroup) {
+        group.tileSet.forEach(tile => {
+            this.add(tile);
+        });
     }
 }
 

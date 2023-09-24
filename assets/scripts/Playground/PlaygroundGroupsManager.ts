@@ -22,25 +22,23 @@ export class PlaygroundGroupsManager extends Component implements IPlaygroundGro
         this.groups.clear();
         this._playground.tileMap.forEach((tile: ITile) => { tile.group = null });
 
-        this._playground.tileMap.forEach((tile: ITile) => {
-            if (!(tile.group instanceof TileGroup) || !this.groups.has(tile.group)) {
-                tile.group = new TileGroup(this);
-                this.groups.add(tile.group);
-            }
-            tile.group.add(tile);
+        const tiles = [...this._playground.tileMap.values()];
+        tiles.sort((a, b) => (a.y * this._playground.width + a.x) - (b.y * this._playground.width + b.x));
+
+        tiles.forEach((tile: ITile) => {
+            let group = tile.group || new TileGroup(this);
+            group.add(tile);
 
             if (tile.x < this._playground.width - 1) {
-                const rightNeighbor: ITile = this._playground.tileMap.get(`x${tile.x + 1}_y${tile.y}`);
-                if (rightNeighbor.type === tile.type) {
-                    rightNeighbor.group = tile.group;
-                }
+                const rightNeighbor: ITile = this._playground.getTile(tile.x + 1, tile.y);
+                this._analyzeNeighbor(tile, rightNeighbor);
             }
             if (tile.y < this._playground.height - 1) {
-                const topNeighbor: ITile = this._playground.tileMap.get(`x${tile.x}_y${tile.y + 1}`);
-                if (topNeighbor.type === tile.type) {
-                    topNeighbor.group = tile.group;
-                }
+                const topNeighbor: ITile = this._playground.getTile(tile.x, tile.y + 1);
+                this._analyzeNeighbor(tile, topNeighbor);
             }
+            
+            this.groups.add(group);
         });
     }
 
@@ -59,6 +57,17 @@ export class PlaygroundGroupsManager extends Component implements IPlaygroundGro
         });
         
         GameManager.eventTarget.emit(GameManager.EventType.NextGameState);
+    }
+
+    private _analyzeNeighbor(tile: ITile, neighbor: ITile) {
+        if (neighbor.type === tile.type) {
+            if (neighbor.group) {
+                neighbor.group.concat(tile.group);
+                this.groups.delete(tile.group);
+            } else {
+                neighbor.group = tile.group;
+            }
+        }
     }
 }
 
