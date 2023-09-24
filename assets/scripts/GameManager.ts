@@ -109,9 +109,11 @@ export class GameManager extends Component implements IGameManager {
                 this.currentState = GameState.Filling;
                 break;
             case GameState.Filling: 
+                this.playgroundRenderer.reorderSiblings();
                 this.currentState = GameState.Analysis;
                 break;
             case GameState.Shuffling: 
+                this.playgroundRenderer.reorderSiblings();
                 if (this._shuffleCount <= this.settings.maxShuffleCount) {
                     this.currentState = GameState.Analysis;
                 } else {
@@ -129,6 +131,7 @@ export class GameManager extends Component implements IGameManager {
                 this.currentState = GameState.InputProcessing;
                 break;
             case GameState.InputProcessing: 
+                this.playgroundRenderer.reorderSiblings();
                 this.currentState = GameState.Filling;
                 break;
         }

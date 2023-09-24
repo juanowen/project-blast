@@ -38,7 +38,7 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
                     let render = this._prevRenderMap.get(tile);
                     if (!render) {
                         render = this.generator.generateRender(tile);
-                        render.lastPosition = v2(tile.x, tile.y + this.playground.height);
+                        render.lastPosition = v2(tile.x, tile.y + this.playground.height / 2);
 
                         this._locateRender(render);
                         this.animator.addToAnimationQueue(render as TileRender, render.appear.bind(render));
@@ -60,6 +60,12 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
         this._prevRenderMap = newRenderMap;
 
         this.animator.processQueues();
+    }
+
+    reorderSiblings() {
+        [...this._prevRenderMap.values()].forEach(render => {
+            render.node.setSiblingIndex(render.localPosition.y);
+        });
     }
 
     private _locateRender(render: ITileRender) {

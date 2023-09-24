@@ -53,7 +53,6 @@ export class TileRender extends Component implements ITileRender {
             .to(0.35, { scale: Vec3.ONE }, {
                 easing: 'backOut',
                 onComplete: () => {
-                    this.node.setSiblingIndex(this.localPosition.y);
                     callback();
                 }
             })
@@ -83,7 +82,6 @@ export class TileRender extends Component implements ITileRender {
             .to(0.35, { position: this.localPosition }, {
                 easing: 'backOut',
                 onComplete: () => {
-                    this.node.setSiblingIndex(this.localPosition.y);
                     callback();
                 }
             })
