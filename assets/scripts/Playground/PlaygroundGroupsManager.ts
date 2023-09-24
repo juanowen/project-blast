@@ -1,5 +1,6 @@
 import { Component, _decorator } from 'cc';
 import { GameManager } from '../GameManager';
+import { IGameSettings } from '../interfaces/game';
 import { IGroupPlayground, IPlaygroundGroupsManager } from '../interfaces/playground';
 import { ITile, ITileGroup, IBasicTile } from '../interfaces/tile';
 import { TileGroup } from '../Tiles/TileGroup';
@@ -7,15 +8,14 @@ const { ccclass, property } = _decorator;
 
 @ccclass('PlaygroundGroupsManager')
 export class PlaygroundGroupsManager extends Component implements IPlaygroundGroupsManager {
-    @property
-    minValidGroupSize: number = 2;
-
     groups: Set<ITileGroup> = new Set();
 
+    private _minValidGroupSize: number = 2;
     private _playground: IGroupPlayground = null;
 
-    init(playground: IGroupPlayground) {
+    init(playground: IGroupPlayground, settings: IGameSettings) {
         this._playground = playground;
+        this._minValidGroupSize = settings.minValidGroupSize;
     }
 
     fillGroups() {
@@ -45,11 +45,11 @@ export class PlaygroundGroupsManager extends Component implements IPlaygroundGro
     }
 
     hasValidGroups(): boolean {
-        return Array.from(this.groups).some(group => group.length >= this.minValidGroupSize);
+        return Array.from(this.groups).some(group => group.length >= this._minValidGroupSize);
     }
 
     collapseGroup(startTile: ITile) {
-        if (startTile.group.length < this.minValidGroupSize) return;
+        if (startTile.group.length < this._minValidGroupSize) return;
 
         const group = startTile.group;
         const multiplier = 1 + (group.length - 1) * 0.15;

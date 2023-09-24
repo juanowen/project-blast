@@ -1,12 +1,13 @@
 import { _decorator, Component, warn, EventTarget } from 'cc';
 import { GameState } from './enums/GameState';
-import { IGameManager } from './interfaces/game';
+import { GameSettings } from './GameSettings';
+import { IGameManager, IGameSettings } from './interfaces/game';
 import { Playground } from './Playground/Playground';
 import { PlaygroundRenderer } from './Renderer/PlaygroundRenderer';
 const { ccclass, property } = _decorator;
 
 const gameEventTarget = new EventTarget();
-enum GameEvent {
+export enum GameEvent {
     GameStateChanged,
     NextGameState,
     PointsGained
@@ -14,17 +15,20 @@ enum GameEvent {
 
 @ccclass('GameManager')
 export class GameManager extends Component implements IGameManager {
+
+    public static eventTarget: EventTarget = gameEventTarget;
+    public static EventType: typeof GameEvent = GameEvent;
+
+    @property({ type: GameSettings })
+    settings: GameSettings = null;
     @property({ type: Playground })
     playgroundManager: Playground = null;
     @property({ type: PlaygroundRenderer })
     playgroundRenderer: PlaygroundRenderer = null;
-    @property
-    maxTurnsCount: number = 10;
-    @property
-    pointsGoal: number = 1000;
 
-    public points: number = 0;
-    public turns: number = 0;
+    private _points: number = 0;
+    private _turns: number = 0;
+    private _shuffleCount: number = 0;
 
     set currentState(value: GameState) {
         this._currentState = value;
@@ -34,18 +38,22 @@ export class GameManager extends Component implements IGameManager {
     }
     private _currentState: GameState = GameState.Initialization;
 
-    public static eventTarget: EventTarget = gameEventTarget;
-    public static EventType: typeof GameEvent = GameEvent;
-
     start() {
-        if (!this.playgroundManager) {
-            warn(`GameManager's playground manager can't be empty!`);
+        if (!this.settings) {
+            warn(`GameManager's game settings can't be empty!`);
+            this.enabled = false;
+        }
+
+        if (!this.playgroundRenderer) {
+            warn(`GameManager's playground renderer can't be empty!`);
             this.enabled = false;
         }
 
         if (!this.playgroundManager) {
-            warn(`GameManager's playground renderer can't be empty!`);
+            warn(`GameManager's playground manager can't be empty!`);
             this.enabled = false;
+        } else {
+            this.playgroundManager.init(this.settings);
         }
 
         window['debug'] = this
@@ -77,15 +85,20 @@ export class GameManager extends Component implements IGameManager {
                 this.onNextGameState();
                 break;
             case GameState.Shuffling: 
+                this._shuffleCount++;
                 this.playgroundManager.shufflePlayground();
                 this.playgroundRenderer.redraw();
                 break;
             case GameState.InputProcessing: 
                 this.playgroundRenderer.redraw();
                 
-                if (++this.turns === this.maxTurnsCount) {
+                if (++this._turns === this.settings.maxTurnsCount) {
                     this.currentState = GameState.Lose;
                 }
+                break;
+            case GameState.Win: 
+                break;
+            case GameState.Lose: 
                 break;
         }
     }
@@ -99,7 +112,11 @@ export class GameManager extends Component implements IGameManager {
                 this.currentState = GameState.Analysis;
                 break;
             case GameState.Shuffling: 
-                this.currentState = GameState.Analysis;
+                if (this._shuffleCount <= this.settings.maxShuffleCount) {
+                    this.currentState = GameState.Analysis;
+                } else {
+                    this.currentState = GameState.Lose;
+                }
                 break;
             case GameState.Analysis: 
                 if (!this.playgroundManager.groupsManager.hasValidGroups()) {
@@ -118,12 +135,11 @@ export class GameManager extends Component implements IGameManager {
     }
 
     onPointsGained(points: number) {
-        this.points += points;
+        this._points += points;
 
-        console.log(this.points);
+        console.log(this._points);
         
-
-        if (this.points >= this.pointsGoal) {
+        if (this._points >= this.settings.pointsGoal) {
             this.currentState = GameState.Win;
         }
     }

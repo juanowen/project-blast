@@ -3,6 +3,7 @@ import { ITile, ITileGenerator, ITileGroup } from './tile';
 import { PlaygroundGroupsManager } from '../Playground/PlaygroundGroupsManager';
 import { PlaygroundFiller } from '../Playground/PlaygroundFiller';
 import { TileType } from '../enums/TileType';
+import { IGameSettings } from './game';
 
 export interface IPlayground {
     width: number,
@@ -35,15 +36,13 @@ export interface IPlaygroundFiller {
     generateTile(tileType: TileType): ITile
 }
 export interface IPlaygroundGroupsManager {
-    minValidGroupSize: number,
     groups: Set<ITileGroup>,
-    init(playground: IGroupPlayground): void,
+    init(playground: IGroupPlayground, settings: IGameSettings): void,
     collapseGroup(startTile: ITile): void
 }
 export interface IPlaygroundShuffler {
-    maxShuffleCount: number,
     init(playground: IShufflePlayground): void,
-    shuffle(playground: IPlayground): boolean
+    shuffle(playground: IPlayground): void
 }
 
 

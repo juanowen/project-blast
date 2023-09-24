@@ -1,11 +1,21 @@
+import { Enum, EventTarget, Vec2 } from "cc"
+import { GameState } from "../enums/GameState"
 import { TileType } from "../enums/TileType"
+import { GameEvent } from "../GameManager"
 
-export interface IGameManager {
+export interface IGameSettings {
+    playgroundSize: Vec2,
+
     maxTurnsCount: number,
     pointsGoal: number,
     
-    points: number,
-    turns: number
+    maxShuffleCount: number,
+    minValidGroupSize: number,
+}
+
+export interface IGameManager {
+    settings: IGameSettings,
+    currentState: GameState
 }
 
 export interface ITileTypeFactoryPair {

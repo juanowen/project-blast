@@ -5,15 +5,15 @@ import { PlaygroundGroupsManager } from './PlaygroundGroupsManager';
 import { PlaygroundShuffler } from './PlaygroundShuffler';
 import { PlaygroundFiller } from './PlaygroundFiller';
 import { GameManager } from '../GameManager';
+import { IGameSettings } from '../interfaces/game';
 const { ccclass, property, executionOrder } = _decorator;
 
 @ccclass('Playground')
 @executionOrder(1000)
 export class Playground extends Component implements IPlayground, IGroupPlayground, IShufflePlayground {
-    @property
-    width: number = 0;
-    @property
-    height: number = 0;
+    public width: number = 0;
+    public height: number = 0;
+
     @property({ type: PlaygroundFiller })
     filler: PlaygroundFiller = null;
     @property({ type: PlaygroundGroupsManager })
@@ -24,9 +24,12 @@ export class Playground extends Component implements IPlayground, IGroupPlaygrou
     get tileMap(): Map<string, ITile> {
         return this._tileMap;
     }
-    public _tileMap: Map<string, ITile> = new Map();
+    private _tileMap: Map<string, ITile> = new Map();
 
-    start() {
+    init(settings: IGameSettings) {
+        this.width = settings.playgroundSize.x;
+        this.height = settings.playgroundSize.y;
+
         if (this.filler) {
             this.filler.init(this);
         } else {
@@ -34,7 +37,7 @@ export class Playground extends Component implements IPlayground, IGroupPlaygrou
         }
 
         if (this.groupsManager) {
-            this.groupsManager.init(this);
+            this.groupsManager.init(this, settings);
         } else {
             warn(`Playground's groups manager can't be empty!`);
         }
@@ -81,17 +84,12 @@ export class Playground extends Component implements IPlayground, IGroupPlaygrou
         if (!this.groupsManager) return;
 
         this.groupsManager.fillGroups();
-        if (!this.groupsManager.hasValidGroups) {
-            this.shufflePlayground();
-        }
     }
 
     shufflePlayground() {
         if (!this.shuffler) return;
 
-        if (this.shuffler.shuffle()) {
-            this.analyzeGroups();
-        }
+        this.shuffler.shuffle();
     }
 }
 
