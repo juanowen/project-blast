@@ -4,9 +4,11 @@ import { ITile } from '../interfaces/tile';
 import { PlaygroundGroupsManager } from './PlaygroundGroupsManager';
 import { PlaygroundShuffler } from './PlaygroundShuffler';
 import { PlaygroundFiller } from './PlaygroundFiller';
-const { ccclass, property } = _decorator;
+import { GameManager } from '../GameManager';
+const { ccclass, property, executionOrder } = _decorator;
 
 @ccclass('Playground')
+@executionOrder(1000)
 export class Playground extends Component implements IPlayground, IGroupPlayground, IShufflePlayground {
     @property
     width: number = 0;
@@ -27,15 +29,12 @@ export class Playground extends Component implements IPlayground, IGroupPlaygrou
     start() {
         if (this.filler) {
             this.filler.init(this);
-
-            this.refill();
         } else {
             warn(`Playground's filler can't be empty!`);
         }
 
         if (this.groupsManager) {
             this.groupsManager.init(this);
-            this.analyzeGroups();
         } else {
             warn(`Playground's groups manager can't be empty!`);
         }
@@ -46,7 +45,7 @@ export class Playground extends Component implements IPlayground, IGroupPlaygrou
             warn(`Playground's shuffler can't be empty!`);
         }
 
-        window['debug'] = this
+        GameManager.eventTarget.emit(GameManager.EventType.NextGameState);
     }
 
     addTile(tile: ITile, x: number, y: number) {

@@ -1,8 +1,10 @@
 export enum GameState {
     Initialization = 0,
     Filling = 10,
-    Animating = 20,
-    Collapsing = 30,
+    Analysis = 20,
+    Shuffling = 30,
+    InputPending = 40,
+    InputProcessing = 50,
     Win = 100,
     Lose = 101
 }

@@ -1,4 +1,5 @@
 import { _decorator, Component } from 'cc';
+import { GameManager } from '../GameManager';
 import { IRenderAnimator, } from '../interfaces/render';
 const { ccclass, property } = _decorator;
 
@@ -27,7 +28,7 @@ export class RenderAnimator extends Component implements IRenderAnimator {
     private _checkIfReady(animId: string) {
         this._animationQueue.delete(animId);
         if (this._animationQueue.size === 0) {
-            console.log('Animation ended');
+            GameManager.eventTarget.emit(GameManager.EventType.NextGameState);
         }
     }
 }

@@ -1,7 +1,7 @@
 import { _decorator } from 'cc';
 import { TileType } from '../enums/TileType';
 import { ITileTypeFactoryPair } from './game';
-import { IPlayground } from './playground';
+import { IPlayground, IPlaygroundGroupsManager } from './playground';
 
 export interface ITile {
     x: number,
@@ -32,6 +32,8 @@ export interface IBasicTileScheme extends ITileScheme {
 
 export interface ITileGroup {
     tileSet: Set<ITile>,
+    manager: IPlaygroundGroupsManager,
+
     length: number,
 
     add(tile: ITile): void,

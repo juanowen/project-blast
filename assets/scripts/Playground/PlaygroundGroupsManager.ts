@@ -24,7 +24,7 @@ export class PlaygroundGroupsManager extends Component implements IPlaygroundGro
 
         this._playground.tileMap.forEach((tile: ITile) => {
             if (!(tile.group instanceof TileGroup) || !this.groups.has(tile.group)) {
-                tile.group = new TileGroup();
+                tile.group = new TileGroup(this);
                 this.groups.add(tile.group);
             }
             tile.group.add(tile);
@@ -48,17 +48,17 @@ export class PlaygroundGroupsManager extends Component implements IPlaygroundGro
         return Array.from(this.groups).some(group => group.length >= this.minValidGroupSize);
     }
 
-    collapse(tile: ITile) {
-        if (tile.group.length < this.minValidGroupSize) return;
+    collapseGroup(startTile: ITile) {
+        if (startTile.group.length < this.minValidGroupSize) return;
 
-        GameManager.eventTarget.emit(GameManager.EventType.TurnEnded);
-
-        const group = tile.group;
+        const group = startTile.group;
         const multiplier = 1 + (group.length - 1) * 0.15;
         group.tileSet.forEach((tile: ITile) => {
             tile.collapse(this._playground, multiplier);
             this._playground.deleteTile(tile);
         });
+        
+        GameManager.eventTarget.emit(GameManager.EventType.NextGameState);
     }
 }
 

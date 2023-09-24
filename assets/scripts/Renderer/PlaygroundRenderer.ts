@@ -26,8 +26,6 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
             this.enabled = false;
             return;
         }
-
-        window['renderer'] = this;
     }
 
     redraw() {
@@ -60,6 +58,8 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
             this.animator.addToAnimationQueue(render as TileRender, render.remove.bind(render));
         });
         this._prevRenderMap = newRenderMap;
+
+        this.animator.processQueues();
     }
 
     private _locateRender(render: ITileRender) {

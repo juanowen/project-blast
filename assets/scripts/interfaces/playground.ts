@@ -38,6 +38,7 @@ export interface IPlaygroundGroupsManager {
     minValidGroupSize: number,
     groups: Set<ITileGroup>,
     init(playground: IGroupPlayground): void,
+    collapseGroup(startTile: ITile): void
 }
 export interface IPlaygroundShuffler {
     maxShuffleCount: number,
