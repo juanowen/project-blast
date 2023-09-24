@@ -47,10 +47,10 @@ export class TileRender extends Component implements ITileRender {
         this.renderSprite.node.scale = Vec3.ZERO;
     }
 
-    appear(callback: Function) {
+    appear(duration: number, callback: Function) {
         this._scaleTween && this._scaleTween.stop();
         this._scaleTween = tween(this.renderSprite.node)
-            .to(0.35, { scale: Vec3.ONE }, {
+            .to(duration, { scale: Vec3.ONE }, {
                 easing: 'backOut',
                 onComplete: () => {
                     callback();
@@ -59,12 +59,12 @@ export class TileRender extends Component implements ITileRender {
             .start();
     }
 
-    remove(callback: Function) {
+    remove(duration: number, callback: Function) {
         this.node.setSiblingIndex(1000);
 
         this._scaleTween && this._scaleTween.stop();
         this._scaleTween = tween(this.renderSprite.node)
-            .to(0.35, { scale: Vec3.ZERO }, {
+            .to(duration, { scale: Vec3.ZERO }, {
                 easing: 'backIn',
                 onComplete: () => {
                     this.node.destroy();
@@ -74,12 +74,12 @@ export class TileRender extends Component implements ITileRender {
             .start();
     }
 
-    move(callback: Function) {
+    move(duration: number, callback: Function) {
         this.node.setPosition(this.lastLocalPosition);
 
         this._moveTween && this._moveTween.stop();
         this._moveTween = tween(this.node)
-            .to(0.35, { position: this.localPosition }, {
+            .to(duration, { position: this.localPosition }, {
                 easing: 'backOut',
                 onComplete: () => {
                     callback();

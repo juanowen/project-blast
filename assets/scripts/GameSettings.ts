@@ -14,5 +14,7 @@ export class GameSettings extends Component implements IGameSettings {
     maxShuffleCount: number = 3;
     @property
     minValidGroupSize: number = 2;
+    @property
+    animationsDuration: number = 0.35;
 }
 

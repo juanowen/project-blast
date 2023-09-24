@@ -11,6 +11,8 @@ export interface IGameSettings {
     
     maxShuffleCount: number,
     minValidGroupSize: number,
+
+    animationsDuration: number
 }
 
 export interface IGameManager {

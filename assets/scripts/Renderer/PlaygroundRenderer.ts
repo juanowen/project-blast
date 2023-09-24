@@ -1,4 +1,5 @@
 import { _decorator, Component, Node, warn, v3, v2 } from 'cc';
+import { IGameSettings } from '../interfaces/game';
 import { IPlaygroundRenderer, ITileRender } from '../interfaces/render';
 import { ITile } from '../interfaces/tile';
 import { Playground } from '../Playground/Playground';
@@ -20,11 +21,27 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
 
     private _prevRenderMap: Map<ITile, ITileRender> = new Map();
 
-    onLoad() {
+    init(settings: IGameSettings) {
         if (!this.renderNode) {
             warn(`PlaygroundRenderer's render node can't be empty`);
             this.enabled = false;
-            return;
+        }
+        
+        if (!this.playground) {
+            warn(`PlaygroundRenderer's playground can't be empty`);
+            this.enabled = false;
+        }
+
+        if (!this.animator) {
+            warn(`PlaygroundRenderer's animator can't be empty`);
+            this.enabled = false;
+        } else {
+            this.animator.init(settings);
+        }
+
+        if (!this.generator) {
+            warn(`PlaygroundRenderer's generator can't be empty`);
+            this.enabled = false;
         }
     }
 

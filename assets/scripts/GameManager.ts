@@ -47,6 +47,8 @@ export class GameManager extends Component implements IGameManager {
         if (!this.playgroundRenderer) {
             warn(`GameManager's playground renderer can't be empty!`);
             this.enabled = false;
+        } else {
+            this.playgroundRenderer.init(this.settings);
         }
 
         if (!this.playgroundManager) {
