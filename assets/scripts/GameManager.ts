@@ -59,6 +59,7 @@ export class GameManager extends Component implements IGameManager {
         }
 
         gameEventTarget.emit(GameEvent.GameInitialized, this.settings);
+        this.onNextGameState();
     }
 
     onEnable() {

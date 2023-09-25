@@ -61,11 +61,11 @@ export class PlaygroundGroupsManager extends Component implements IPlaygroundGro
 
     private _analyzeNeighbor(tile: ITile, neighbor: ITile) {
         if (neighbor.type === tile.type) {
-            if (neighbor.group) {
-                neighbor.group.concat(tile.group);
-                this.groups.delete(tile.group);
-            } else {
-                neighbor.group = tile.group;
+            if (neighbor.group === null) {
+                tile.group.add(neighbor);
+            } else if (neighbor.group !== tile.group) {
+                tile.group.concat(neighbor.group);
+                this.groups.delete(neighbor.group);
             }
         }
     }

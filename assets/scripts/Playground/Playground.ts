@@ -47,8 +47,6 @@ export class Playground extends Component implements IPlayground, IGroupPlaygrou
         } else {
             warn(`Playground's shuffler can't be empty!`);
         }
-
-        GameManager.eventTarget.emit(GameManager.EventType.NextGameState);
     }
 
     addTile(tile: ITile, x: number, y: number) {
