@@ -1,4 +1,4 @@
-import { _decorator, Color, Node, Component, SpriteFrame, Sprite, warn, tween, Vec3, Vec2, Tween, UITransform, v3, v2 } from 'cc';
+import { _decorator, Color, Node, Component, SpriteFrame, Sprite, warn, tween, Vec3, Vec2, Tween, UITransform, v3, v2, Size } from 'cc';
 import { ITileRender } from '../interfaces/render';
 import { ITile } from '../interfaces/tile';
 const { ccclass, property } = _decorator;
@@ -10,6 +10,10 @@ export class TileRender extends Component implements ITileRender {
 
     public model: ITile = null;
     public lastPosition: Vec2 = Vec2.ZERO;
+    set size(value: Size) {
+        this._size = value;
+        this._transform && this._transform.setContentSize(value.x, value.y);
+    }
 
     get id(): string {
         return this.model.id;
@@ -32,6 +36,7 @@ export class TileRender extends Component implements ITileRender {
         }
     }
     
+    private _size: Size = Size.ZERO;
     private _scaleTween: Tween<Node> = null;
     private _moveTween: Tween<Node> = null;
     private _transform: UITransform = null;

@@ -8,6 +8,7 @@ const { ccclass, property } = _decorator;
 
 const gameEventTarget = new EventTarget();
 export enum GameEvent {
+    GameInitialized,
     GameStateChanged,
     NextGameState,
     PointsGained
@@ -58,6 +59,8 @@ export class GameManager extends Component implements IGameManager {
             this.playgroundManager.init(this.settings);
         }
 
+
+        gameEventTarget.emit(GameEvent.GameInitialized, this.settings);
         window['debug'] = this
     }
 

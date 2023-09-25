@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, warn, v3, v2 } from 'cc';
+import { _decorator, Component, Node, warn, v3, v2, UITransform } from 'cc';
 import { IGameSettings } from '../interfaces/game';
 import { IPlaygroundRenderer, ITileRender } from '../interfaces/render';
 import { ITile } from '../interfaces/tile';
@@ -11,6 +11,8 @@ const { ccclass, property } = _decorator;
 @ccclass('PlaygroundRenderer')
 export class PlaygroundRenderer extends Component implements IPlaygroundRenderer {
     @property({ type: Node })
+    backNode: Node = null;
+    @property({ type: Node })
     renderNode: Node = null;
     @property({ type: Playground })
     playground: Playground = null;
@@ -20,11 +22,35 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
     generator: TileRenderGenerator = null;
 
     private _prevRenderMap: Map<ITile, ITileRender> = new Map();
+    private _settings: IGameSettings = null;
 
     init(settings: IGameSettings) {
+        this._settings = settings;
+
+        if (!this.backNode) {
+            warn(`PlaygroundRenderer's back node can't be empty`);
+            this.enabled = false;
+        } else {
+            const transform = this.backNode.getComponent(UITransform);
+            transform && transform.setContentSize(
+                settings.playgroundSize.width * settings.blockSize.width + settings.playgroundPadding.left + settings.playgroundPadding.right,
+                settings.playgroundSize.height * settings.blockSize.height + settings.playgroundPadding.top + settings.playgroundPadding.bottom
+            );
+            this.backNode.setPosition(-settings.playgroundPadding.left, -settings.playgroundPadding.bottom);
+        }
+
         if (!this.renderNode) {
             warn(`PlaygroundRenderer's render node can't be empty`);
             this.enabled = false;
+        } else {
+            const transform = this.renderNode.getComponent(UITransform);
+            transform && transform.setContentSize(
+                settings.playgroundSize.width * settings.blockSize.width,
+                settings.playgroundSize.height * settings.blockSize.height + settings.playgroundPadding.top
+            );
+            
+            const selfTransform = this.node.getComponent(UITransform);
+            selfTransform.setContentSize(transform.contentSize);
         }
         
         if (!this.playground) {
@@ -56,6 +82,7 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
                     if (!render) {
                         render = this.generator.generateRender(tile);
                         render.lastPosition = v2(tile.x, tile.y + this.playground.height / 2);
+                        render.size = this._settings.blockSize;
 
                         this._locateRender(render);
                         this.animator.addToAnimationQueue(render as TileRender, render.appear.bind(render));

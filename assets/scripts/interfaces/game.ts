@@ -1,10 +1,11 @@
-import { Enum, EventTarget, Vec2 } from "cc"
+import { Size } from "cc"
 import { GameState } from "../enums/GameState"
 import { TileType } from "../enums/TileType"
-import { GameEvent } from "../GameManager"
 
 export interface IGameSettings {
-    playgroundSize: Vec2,
+    playgroundSize: Size,
+    playgroundPadding: IPaddingSettings,
+    blockSize: Size,
 
     maxTurnsCount: number,
     pointsGoal: number,
@@ -13,6 +14,13 @@ export interface IGameSettings {
     minValidGroupSize: number,
 
     animationsDuration: number
+}
+
+export interface IPaddingSettings {
+    left: number,
+    top: number,
+    right: number,
+    bottom: number,
 }
 
 export interface IGameManager {

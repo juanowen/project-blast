@@ -1,0 +1,75 @@
+{
+  "ver": "1.0.23",
+  "importer": "image",
+  "imported": true,
+  "uuid": "e12ca992-c597-4670-86f1-ae2f7539f8af",
+  "files": [
+    ".json",
+    ".png"
+  ],
+  "subMetas": {
+    "6c48a": {
+      "importer": "texture",
+      "uuid": "e12ca992-c597-4670-86f1-ae2f7539f8af@6c48a",
+      "displayName": "dark_plate",
+      "id": "6c48a",
+      "name": "texture",
+      "userData": {
+        "wrapModeS": "clamp-to-edge",
+        "wrapModeT": "clamp-to-edge",
+        "imageUuidOrDatabaseUri": "e12ca992-c597-4670-86f1-ae2f7539f8af",
+        "isUuid": true,
+        "minfilter": "linear",
+        "magfilter": "linear",
+        "mipfilter": "none",
+        "anisotropy": 0
+      },
+      "ver": "1.0.21",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "f9941": {
+      "importer": "sprite-frame",
+      "uuid": "e12ca992-c597-4670-86f1-ae2f7539f8af@f9941",
+      "displayName": "dark_plate",
+      "id": "f9941",
+      "name": "spriteFrame",
+      "userData": {
+        "trimType": "auto",
+        "trimThreshold": 1,
+        "rotated": false,
+        "offsetX": 0,
+        "offsetY": 0,
+        "trimX": 0,
+        "trimY": 0,
+        "width": 133,
+        "height": 51,
+        "rawWidth": 133,
+        "rawHeight": 51,
+        "borderTop": 19,
+        "borderBottom": 10,
+        "borderLeft": 10,
+        "borderRight": 10,
+        "packable": true,
+        "isUuid": true,
+        "imageUuidOrDatabaseUri": "e12ca992-c597-4670-86f1-ae2f7539f8af@6c48a",
+        "atlasUuid": ""
+      },
+      "ver": "1.0.9",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "type": "sprite-frame",
+    "fixAlphaTransparencyArtifacts": true,
+    "hasAlpha": true,
+    "redirect": "e12ca992-c597-4670-86f1-ae2f7539f8af@f9941"
+  }
+}

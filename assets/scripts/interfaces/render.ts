@@ -1,4 +1,4 @@
-import { Color, Component, Node, SpriteFrame, Vec2, Vec3 } from "cc";
+import { Color, Component, Node, Size, SpriteFrame, Vec2, Vec3 } from "cc";
 import { IGameSettings, ITileTypeFactoryPair } from "./game";
 import { IPlayground } from "./playground";
 import { ITile } from "./tile";
@@ -6,6 +6,7 @@ import { ITile } from "./tile";
 export interface IRender {
     node: Node,
     color: Color,
+    size: Size,
     
     appear(duration: number, callback: Function): void,
     remove(duration: number, callback: Function): void,

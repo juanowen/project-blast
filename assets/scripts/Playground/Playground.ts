@@ -27,8 +27,8 @@ export class Playground extends Component implements IPlayground, IGroupPlaygrou
     private _tileMap: Map<string, ITile> = new Map();
 
     init(settings: IGameSettings) {
-        this.width = settings.playgroundSize.x;
-        this.height = settings.playgroundSize.y;
+        this.width = settings.playgroundSize.width;
+        this.height = settings.playgroundSize.height;
 
         if (this.filler) {
             this.filler.init(this);
