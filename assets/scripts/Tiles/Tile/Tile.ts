@@ -1,5 +1,6 @@
+import { GameValueType } from '../../enums/GameValueType';
 import { TileType } from '../../enums/TileType';
-import { GameManager } from '../../GameManager';
+import { GameValuesDictionary } from '../../GameValuesDictionary';
 import { IPlayground } from '../../interfaces/playground';
 import { ITileGroup, ITileScheme, ITile } from '../../interfaces/tile';
 
@@ -26,7 +27,11 @@ export class Tile implements ITile {
 
     collapse (playground: IPlayground, multiplier: number = 1) {
         const points = Math.floor(this.points * multiplier);
-        GameManager.eventTarget.emit(GameManager.EventType.PointsGained, points);
+        GameValuesDictionary.eventTarget.emit(
+            GameValuesDictionary.EventType.IncrementValue, 
+            GameValueType.Points,
+            points
+        );
     }
 }
 

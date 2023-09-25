@@ -1,5 +1,6 @@
 import { Size } from "cc"
 import { GameState } from "../enums/GameState"
+import { GameValueType } from "../enums/GameValueType"
 import { TileType } from "../enums/TileType"
 
 export interface IGameSettings {
@@ -21,6 +22,15 @@ export interface IPaddingSettings {
     top: number,
     right: number,
     bottom: number,
+}
+
+export interface IGameValuesDictionary {
+    data: IGameValue[]
+}
+
+export interface IGameValue {
+    type: GameValueType,
+    value: string | number | boolean
 }
 
 export interface IGameManager {

@@ -232,8 +232,6 @@ export class TransformAdapter extends Component {
         View.instance[func]('canvas-resize', this.onTransformEvent, this);
         director[func](Director.EVENT_AFTER_SCENE_LAUNCH, this.onTransformEvent, this);
 
-        director[func](Director.EVENT_AFTER_UPDATE, this.onEventAfterUpdate, this);
-
         this.node[func](Node.EventType.SIZE_CHANGED, this.onSizeChanged, this);
     }
 
@@ -323,6 +321,8 @@ export class TransformAdapter extends Component {
 
         this._lastState = { viewSize, parentSize, selfSize, isHorizontal, sizeRatio };
         this._transformNode();
+        
+        director.once(Director.EVENT_AFTER_UPDATE, this._transformNode, this);
     }
 
     onEventAfterUpdate() {

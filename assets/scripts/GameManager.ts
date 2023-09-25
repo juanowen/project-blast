@@ -1,7 +1,9 @@
 import { _decorator, Component, warn, EventTarget } from 'cc';
 import { GameState } from './enums/GameState';
+import { GameValueType } from './enums/GameValueType';
 import { GameSettings } from './GameSettings';
-import { IGameManager, IGameSettings } from './interfaces/game';
+import { GameValuesDictionary } from './GameValuesDictionary';
+import { IGameManager, IGameSettings, IGameValue } from './interfaces/game';
 import { Playground } from './Playground/Playground';
 import { PlaygroundRenderer } from './Renderer/PlaygroundRenderer';
 const { ccclass, property } = _decorator;
@@ -10,8 +12,7 @@ const gameEventTarget = new EventTarget();
 export enum GameEvent {
     GameInitialized,
     GameStateChanged,
-    NextGameState,
-    PointsGained
+    NextGameState
 };
 
 @ccclass('GameManager')
@@ -27,8 +28,6 @@ export class GameManager extends Component implements IGameManager {
     @property({ type: PlaygroundRenderer })
     playgroundRenderer: PlaygroundRenderer = null;
 
-    private _points: number = 0;
-    private _turns: number = 0;
     private _shuffleCount: number = 0;
 
     set currentState(value: GameState) {
@@ -59,9 +58,7 @@ export class GameManager extends Component implements IGameManager {
             this.playgroundManager.init(this.settings);
         }
 
-
         gameEventTarget.emit(GameEvent.GameInitialized, this.settings);
-        window['debug'] = this
     }
 
     onEnable() {
@@ -76,7 +73,6 @@ export class GameManager extends Component implements IGameManager {
         const func = isOn ? 'on' : 'off';
 
         gameEventTarget[func](GameEvent.NextGameState, this.onNextGameState, this);
-        gameEventTarget[func](GameEvent.PointsGained, this.onPointsGained, this);
     }
 
     onCurrentStateChanged() {
@@ -87,6 +83,7 @@ export class GameManager extends Component implements IGameManager {
                 break;
             case GameState.Analysis: 
                 this.playgroundManager.analyzeGroups();
+                this._checkGameOver();
                 this.onNextGameState();
                 break;
             case GameState.Shuffling: 
@@ -96,14 +93,14 @@ export class GameManager extends Component implements IGameManager {
                 break;
             case GameState.InputProcessing: 
                 this.playgroundRenderer.redraw();
-                
-                if (++this._turns === this.settings.maxTurnsCount) {
-                    this.currentState = GameState.Lose;
-                }
                 break;
             case GameState.Win: 
+                this.playgroundRenderer.redraw();
+                console.log('win');
                 break;
             case GameState.Lose: 
+                this.playgroundRenderer.redraw();
+                console.log('lose');
                 break;
         }
     }
@@ -133,6 +130,10 @@ export class GameManager extends Component implements IGameManager {
                 }
                 break;
             case GameState.InputPending: 
+                GameValuesDictionary.eventTarget.emit(
+                    GameValuesDictionary.EventType.IncrementValue, 
+                    GameValueType.Turns
+                );
                 this.currentState = GameState.InputProcessing;
                 break;
             case GameState.InputProcessing: 
@@ -142,13 +143,17 @@ export class GameManager extends Component implements IGameManager {
         }
     }
 
-    onPointsGained(points: number) {
-        this._points += points;
+    _checkGameOver() {
+        const turns = GameValuesDictionary.getValue(GameValueType.Turns);
+        const points = GameValuesDictionary.getValue(GameValueType.Points);
 
-        console.log(this._points);
-        
-        if (this._points >= this.settings.pointsGoal) {
+        if (points >= this.settings.pointsGoal && turns <= this.settings.maxTurnsCount) {
             this.currentState = GameState.Win;
+            return;
+        }
+        if (turns === this.settings.maxTurnsCount && points < this.settings.pointsGoal) {
+            this.currentState = GameState.Lose;
+            return;
         }
     }
 }
