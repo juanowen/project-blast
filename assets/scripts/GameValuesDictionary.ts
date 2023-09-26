@@ -1,4 +1,4 @@
-import { _decorator, Component, EventTarget, Enum, warn } from 'cc';
+import { _decorator, Component, EventTarget, Enum, warn, game } from 'cc';
 import { GameValueType } from './enums/GameValueType';
 import { IGameValue, IGameValuesDictionary } from './interfaces/game';
 const { ccclass, property } = _decorator;
@@ -90,8 +90,13 @@ export class GameValuesDictionary extends Component implements IGameValuesDictio
     @property({ type: [GameValue] })
     data: GameValue[] = [];
 
+    onLoad() {
+		game.addPersistRootNode(this.node);
+    }
+
     onEnable() {
         this._handleSubscriptions(true);
+        this._broadcastChanges();
     }
 
     onDisable() {
@@ -119,7 +124,7 @@ export class GameValuesDictionary extends Component implements IGameValuesDictio
             const targetDataType = typeof targetData.value;
             if (targetDataType === typeof value) {
                 targetData.value = value;
-                gameValuesDictionaryTarget.emit(GameValuesDictionaryEvent.ValuesChanged, this.data);
+                this._broadcastChanges();
             } else {
                 warn(`Cant't update game value ${GameValueType[type]}. It has another data type [${targetDataType}].`);
             }
@@ -132,7 +137,7 @@ export class GameValuesDictionary extends Component implements IGameValuesDictio
             const targetDataType = typeof targetData.value;
             if (targetDataType === 'number') {
                 targetData.value = +targetData.value + incrementSize;
-                gameValuesDictionaryTarget.emit(GameValuesDictionaryEvent.ValuesChanged, this.data);
+                this._broadcastChanges();
             } else {
                 warn(`Cant't increment game value ${GameValueType[type]}. It isn't number [${targetDataType}].`);
             }
@@ -145,11 +150,15 @@ export class GameValuesDictionary extends Component implements IGameValuesDictio
             const targetDataType = typeof targetData.value;
             if (targetDataType === 'number') {
                 targetData.value = +targetData.value - decrementSize;
-                gameValuesDictionaryTarget.emit(GameValuesDictionaryEvent.ValuesChanged, this.data);
+                this._broadcastChanges();
             } else {
                 warn(`Cant't increment game value ${GameValueType[type]}. It isn't number [${targetDataType}].`);
             }
         }
+    }
+
+    private _broadcastChanges() {
+        gameValuesDictionaryTarget.emit(GameValuesDictionaryEvent.ValuesChanged, this.data);
     }
 
     public static getValueFromData(type: GameValueType, data: IGameValue[]): string | number | boolean | null {

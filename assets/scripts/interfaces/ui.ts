@@ -5,7 +5,8 @@ export interface ICounterView {
     label: Label,
     currentValue: number,
 
-    onGameValuesChanged(data: IGameValue[]): void
+    onGameValuesChanged(data: IGameValue[]): void,
+    onBeforeSceneLoadingEvent(): void
 }
 
 export interface ICountDownView extends ICounterView {

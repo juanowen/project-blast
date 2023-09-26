@@ -1,4 +1,5 @@
-import { _decorator, Component, Node, Label, Tween, tween, warn,  } from 'cc';
+import { _decorator, Component, Node, Label, Tween, tween, warn, director, Director, Enum,  } from 'cc';
+import { GameValueType } from '../../enums/GameValueType';
 import { GameManager } from '../../GameManager';
 import { GameValuesDictionary } from '../../GameValuesDictionary';
 import { IGameSettings, IGameValue } from '../../interfaces/game';
@@ -13,6 +14,8 @@ interface CounterObject {
 export class Counter extends Component implements ICounterView {
     @property({ type: Label })
     label: Label = null;
+    @property({ type: Enum(GameValueType) })
+    targetValueType: GameValueType = GameValueType.None;
     
     get currentValue(): number {
         return this._currentValue;
@@ -47,6 +50,7 @@ export class Counter extends Component implements ICounterView {
             this.onGameValuesChanged,
             this
         );
+        director.on(Director.EVENT_BEFORE_SCENE_LOADING, this.onBeforeSceneLoadingEvent, this);
     }
 
     _updateLabelString() {
@@ -74,7 +78,16 @@ export class Counter extends Component implements ICounterView {
     }
     
     onGameValuesChanged(data: IGameValue[]) {
+        const value = GameValuesDictionary.getValueFromData(this.targetValueType, data) as number;
+        this.currentValue = value || 0;
+
         this._animateLabelString();
+    }
+
+    onBeforeSceneLoadingEvent() {
+        this._animTween && this._animTween.stop();
+        this._updateLabelString();
+        this._handleSubscriptions(false);
     }
 }
 

@@ -1,17 +1,19 @@
 import { _decorator, Component, Node } from 'cc';
+import { GameValueType } from '../../../enums/GameValueType';
 import { GameManager } from '../../../GameManager';
-import { IGameSettings } from '../../../interfaces/game';
+import { GameValuesDictionary } from '../../../GameValuesDictionary';
+import { IGameSettings, IGameValue } from '../../../interfaces/game';
 import { ICountDownView } from '../../../interfaces/ui';
 import { Counter } from '../Counter';
 const { ccclass, property } = _decorator;
 
 @ccclass('CountDown')
 export class CountDown extends Counter implements ICountDownView {
+    @property 
+    maxValuePropName: string = '';
+
     get maxValue(): number {
         return this._maxValue;
-    }
-    set maxValue(value: number) {
-        this._maxValue = value;
     }
     
     private _maxValue: number = 0;
@@ -24,7 +26,17 @@ export class CountDown extends Counter implements ICountDownView {
         GameManager.eventTarget[func](GameManager.EventType.GameInitialized, this.onGameInitialized, this);
     }
     
+    onGameValuesChanged(data: IGameValue[]) {
+        const value = GameValuesDictionary.getValueFromData(this.targetValueType, data) as number;
+        this.currentValue = this.maxValue - (value || 0);
+
+        this._animateLabelString();
+    }
+    
     onGameInitialized(settings: IGameSettings) {
+        this._maxValue = settings.hasOwnProperty(this.maxValuePropName) ? settings[this.maxValuePropName] : 0;
+        this.currentValue = this._maxValue;
+
         this._updateLabelString();
     }
 }

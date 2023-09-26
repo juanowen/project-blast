@@ -1,4 +1,4 @@
-import { _decorator, Component, warn, EventTarget } from 'cc';
+import { _decorator, Component, warn, EventTarget, director } from 'cc';
 import { GameState } from './enums/GameState';
 import { GameValueType } from './enums/GameValueType';
 import { GameSettings } from './GameSettings';
@@ -27,8 +27,6 @@ export class GameManager extends Component implements IGameManager {
     playgroundManager: Playground = null;
     @property({ type: PlaygroundRenderer })
     playgroundRenderer: PlaygroundRenderer = null;
-
-    private _shuffleCount: number = 0;
 
     set currentState(value: GameState) {
         this._currentState = value;
@@ -88,7 +86,10 @@ export class GameManager extends Component implements IGameManager {
                 this.onNextGameState();
                 break;
             case GameState.Shuffling: 
-                this._shuffleCount++;
+                GameValuesDictionary.eventTarget.emit(
+                    GameValuesDictionary.EventType.IncrementValue, 
+                    GameValueType.ShuffleCount
+                );
                 this.playgroundManager.shufflePlayground();
                 this.playgroundRenderer.redraw();
                 break;
@@ -97,11 +98,18 @@ export class GameManager extends Component implements IGameManager {
                 break;
             case GameState.Win: 
                 this.playgroundRenderer.redraw();
-                console.log('win');
+                director.loadScene('FinalScene');
                 break;
             case GameState.Lose: 
                 this.playgroundRenderer.redraw();
-                console.log('lose');
+
+                GameValuesDictionary.eventTarget.emit(
+                    GameValuesDictionary.EventType.UpdateValue,
+                    GameValueType.PlayerLost,
+                    true
+                );
+                
+                director.loadScene('FinalScene');
                 break;
         }
     }
@@ -112,16 +120,12 @@ export class GameManager extends Component implements IGameManager {
                 this.currentState = GameState.Filling;
                 break;
             case GameState.Filling: 
+            case GameState.Shuffling: 
+                // this.playgroundRenderer.reorderSiblings();
+                // this.currentState = GameState.Analysis;
+                // break;
                 this.playgroundRenderer.reorderSiblings();
                 this.currentState = GameState.Analysis;
-                break;
-            case GameState.Shuffling: 
-                this.playgroundRenderer.reorderSiblings();
-                if (this._shuffleCount <= this.settings.maxShuffleCount) {
-                    this.currentState = GameState.Analysis;
-                } else {
-                    this.currentState = GameState.Lose;
-                }
                 break;
             case GameState.Analysis: 
                 if (!this.playgroundManager.groupsManager.hasValidGroups()) {
@@ -147,13 +151,28 @@ export class GameManager extends Component implements IGameManager {
     _checkGameOver() {
         const turns = GameValuesDictionary.getValue(GameValueType.Turns);
         const points = GameValuesDictionary.getValue(GameValueType.Points);
+        const shuffleCount = GameValuesDictionary.getValue(GameValueType.ShuffleCount);
 
         if (points >= this.settings.pointsGoal && turns <= this.settings.maxTurnsCount) {
             this.currentState = GameState.Win;
             return;
         }
+        if (shuffleCount > this.settings.maxShuffleCount) {
+            this.currentState = GameState.Lose;
+            GameValuesDictionary.eventTarget.emit(
+                GameValuesDictionary.EventType.UpdateValue,
+                GameValueType.LossReason,
+                'No more available moves'
+            );
+            return;
+        }
         if (turns === this.settings.maxTurnsCount && points < this.settings.pointsGoal) {
             this.currentState = GameState.Lose;
+            GameValuesDictionary.eventTarget.emit(
+                GameValuesDictionary.EventType.UpdateValue,
+                GameValueType.LossReason,
+                'Not enough points scored'
+            );
             return;
         }
     }

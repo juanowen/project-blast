@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, warn, UITransform, Label, Tween, tween, Size, size, v3 } from 'cc';
+import { _decorator, Component, Node, warn, UITransform, Label, Tween, tween, Size, size, v3, director, Director } from 'cc';
 import { GameManager } from '../../../GameManager';
 import { GameValuesDictionary } from '../../../GameValuesDictionary';
 import { IGameSettings, IGameValue } from '../../../interfaces/game';
@@ -8,6 +8,8 @@ const { ccclass, property } = _decorator;
 
 @ccclass('ProgressBar')
 export class ProgressBar extends Counter implements IProgressBarView {
+    @property 
+    maxValuePropName: string = '';
     @property({ type: UITransform })
     fillerTransform: UITransform = null;
     @property
@@ -15,9 +17,6 @@ export class ProgressBar extends Counter implements IProgressBarView {
 
     get maxValue(): number {
         return this._maxValue;
-    }
-    set maxValue(value: number) {
-        this._maxValue = value;
     }
     get currentRatio(): number {
         let ratio = this.currentValue / this._maxValue;
@@ -97,6 +96,8 @@ export class ProgressBar extends Counter implements IProgressBarView {
     }
 
     onGameInitialized(settings: IGameSettings) {
+        this._maxValue = settings.hasOwnProperty(this.maxValuePropName) ? settings[this.maxValuePropName] : 0;
+
         this._updateLabelString();
     }
 
@@ -106,8 +107,18 @@ export class ProgressBar extends Counter implements IProgressBarView {
     }
     
     onGameValuesChanged(data: IGameValue[]) {
+        const value = GameValuesDictionary.getValueFromData(this.targetValueType, data) as number;
+        this.currentValue = value || 0;
+
         this._animateFiller();
         this._updateLabelString();
+    }
+
+    onBeforeSceneLoadingEvent() {
+        this._fillerTween && this._fillerTween.stop();
+        this._redrawFiller();
+
+        super.onBeforeSceneLoadingEvent();
     }
 }
 
