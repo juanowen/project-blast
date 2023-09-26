@@ -1,4 +1,7 @@
 export enum InputTarget {
     None,
-    Tile
+    Tile,
+    StartButton,
+    RestartButton,
+    SettingsButton
 }

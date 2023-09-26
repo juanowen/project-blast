@@ -6,6 +6,7 @@ import { GameValuesDictionary } from './GameValuesDictionary';
 import { IGameManager, IGameSettings, IGameValue } from './interfaces/game';
 import { Playground } from './Playground/Playground';
 import { PlaygroundRenderer } from './Renderer/PlaygroundRenderer';
+import { SceneSwitcher } from './UI/SceneSwitcher';
 const { ccclass, property } = _decorator;
 
 const gameEventTarget = new EventTarget();
@@ -98,7 +99,7 @@ export class GameManager extends Component implements IGameManager {
                 break;
             case GameState.Win: 
                 this.playgroundRenderer.redraw();
-                director.loadScene('FinalScene');
+                SceneSwitcher.eventTarget.emit(SceneSwitcher.EventType.SwitchScene, 'FinalScene');
                 break;
             case GameState.Lose: 
                 this.playgroundRenderer.redraw();
@@ -109,7 +110,7 @@ export class GameManager extends Component implements IGameManager {
                     true
                 );
                 
-                director.loadScene('FinalScene');
+                SceneSwitcher.eventTarget.emit(SceneSwitcher.EventType.SwitchScene, 'FinalScene');
                 break;
         }
     }

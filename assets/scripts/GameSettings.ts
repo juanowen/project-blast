@@ -1,4 +1,4 @@
-import { _decorator, Component, Size, size } from 'cc';
+import { _decorator, Component, Size, size, game } from 'cc';
 import { IGameSettings, IPaddingSettings } from './interfaces/game';
 const { ccclass, property } = _decorator;
 
@@ -32,5 +32,9 @@ export class GameSettings extends Component implements IGameSettings {
     minValidGroupSize: number = 2;
     @property
     animationsDuration: number = 0.35;
+
+    onLoad() {
+		game.addPersistRootNode(this.node);
+    }
 }
 

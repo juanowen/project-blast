@@ -96,7 +96,9 @@ export class GameValuesDictionary extends Component implements IGameValuesDictio
 
     onEnable() {
         this._handleSubscriptions(true);
-        this._broadcastChanges();
+        this.scheduleOnce(() => {
+            this._broadcastChanges();
+        });
     }
 
     onDisable() {

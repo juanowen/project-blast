@@ -203,6 +203,13 @@ export class TransformAdapter extends Component {
         if (EDITOR) {
             this._fillPrivateProps();
             this.onTransformEvent();
+
+            this.node.children.forEach(child => {
+                const adapter = child.getComponent(TransformAdapter);
+                if (adapter) {
+                    adapter.tryInEditor = true;
+                }
+            });
         }
     }
     
