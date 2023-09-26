@@ -1,7 +1,5 @@
 import { _decorator } from 'cc';
 import { ITile, ITileGenerator, ITileGroup } from './tile';
-import { PlaygroundGroupsManager } from '../Playground/PlaygroundGroupsManager';
-import { PlaygroundFiller } from '../Playground/PlaygroundFiller';
 import { TileType } from '../enums/TileType';
 import { IGameSettings } from './game';
 

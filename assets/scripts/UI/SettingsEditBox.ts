@@ -1,11 +1,9 @@
 import { _decorator, Component, Node, Label, warn } from 'cc';
-import { GameSettings } from '../GameSettings';
+import { GameSettings, GameSettingsEventTarget, GameSettingsEventType } from '../GameSettings';
 const { ccclass, property } = _decorator;
 
 @ccclass('SettingsEditBox')
 export class SettingsEditBox extends Component {
-    @property({ type: GameSettings })
-    settings: GameSettings = null;
     @property({ type: Label })
     valueLabel: Label = null;
     @property
@@ -17,15 +15,11 @@ export class SettingsEditBox extends Component {
     @property
     maxValue: number = 1; 
 
+    private _settings: GameSettings = null;
     private _value: number = 0;
 
-    onLoad() {
+    start() {
         this.propertyName = this.propertyName.trim();
-
-        if (!this.settings) {
-            warn(`SettingsEditBox's settings can't be empty!`);
-            this.enabled = false;
-        }
         
         if (!this.valueLabel) {
             warn(`SettingsEditBox's value label can't be empty!`);
@@ -35,7 +29,7 @@ export class SettingsEditBox extends Component {
         if (this.propertyName.length === 0) {
             warn(`SettingsEditBox's property name can't be empty!`);
             this.enabled = false;
-        } else if (this.settings) {
+        } else if (this._settings) {
             const value = this._getSettingsValue(); 
             if (value === null) {
                 warn(`Game settings doesn't have property with name "${this.propertyName}"!`);
@@ -49,15 +43,31 @@ export class SettingsEditBox extends Component {
                 this._value = value;
             }
         }
+        
+        this._updateLabelValue(false);
+    }
+    
+    onEnable() {
+        this._handleSubscriptions(true);
     }
 
-    start() {
-        this._updateLabelValue(false);
+    onDisable() {
+        this._handleSubscriptions(false);
+    }
+
+    _handleSubscriptions(isOn: boolean) {
+        const func = isOn ? 'on' : 'off';
+
+        GameSettingsEventTarget[func](
+            GameSettingsEventType.BroadcastSettings,
+            this.onBroadcastSettings,
+            this
+        );
     }
 
     _getSettingsValue() {
         const pathArray = this.propertyName.split('.');
-        let result = this.settings;
+        let result = this._settings;
         pathArray.forEach(pathPart => {
             if (!result.hasOwnProperty(pathPart.trim())) return null;
             result = result[pathPart.trim()];
@@ -68,7 +78,7 @@ export class SettingsEditBox extends Component {
 
     _setSettingsValue() {
         const pathArray = this.propertyName.split('.');
-        let property = this.settings;
+        let property = this._settings;
 
         let i = 0;
         for (i; i < pathArray.length - 1; ++i) {
@@ -94,6 +104,10 @@ export class SettingsEditBox extends Component {
     decrementValue() {
         this._value = Math.max(this.minValue, this._value - this.stepValue);
         this._updateLabelValue();
+    }
+
+    onBroadcastSettings(settings: GameSettings) {
+        this._settings = settings;
     }
 }
 

@@ -1,6 +1,11 @@
-import { _decorator, Component, Size, size, game } from 'cc';
+import { _decorator, Component, Size, size, game, EventTarget } from 'cc';
 import { IGameSettings, IPaddingSettings } from './interfaces/game';
 const { ccclass, property } = _decorator;
+
+export const GameSettingsEventTarget: EventTarget = new EventTarget();
+export enum GameSettingsEventType {
+    BroadcastSettings
+}
 
 @ccclass('PaddingSettings')
 class PaddingSettings implements IPaddingSettings {
@@ -36,7 +41,11 @@ export class GameSettings extends Component implements IGameSettings {
     tileTypesCount: number = 5;
 
     onLoad() {
-		  game.addPersistRootNode(this.node);
+		game.addPersistRootNode(this.node);
+    }
+
+    onEnable() {
+        GameSettingsEventTarget.emit(GameSettingsEventType.BroadcastSettings, this);
     }
 }
 

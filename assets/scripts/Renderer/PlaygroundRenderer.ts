@@ -31,8 +31,8 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
             warn(`PlaygroundRenderer's back node can't be empty`);
             this.enabled = false;
         } else {
-            const transform = this.backNode.getComponent(UITransform);
-            transform && transform.setContentSize(
+            const backTransform = this.backNode.getComponent(UITransform);
+            backTransform && backTransform.setContentSize(
                 settings.playgroundSize.width * settings.blockSize.width + settings.playgroundPadding.left + settings.playgroundPadding.right,
                 settings.playgroundSize.height * settings.blockSize.height + settings.playgroundPadding.top + settings.playgroundPadding.bottom
             );
@@ -43,14 +43,14 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
             warn(`PlaygroundRenderer's render node can't be empty`);
             this.enabled = false;
         } else {
-            const transform = this.renderNode.getComponent(UITransform);
-            transform && transform.setContentSize(
+            const renderTransform = this.renderNode.getComponent(UITransform);
+            renderTransform && renderTransform.setContentSize(
                 settings.playgroundSize.width * settings.blockSize.width,
                 settings.playgroundSize.height * settings.blockSize.height + settings.playgroundPadding.top
             );
             
             const selfTransform = this.node.getComponent(UITransform);
-            selfTransform.setContentSize(transform.contentSize);
+            selfTransform.setContentSize(renderTransform.contentSize);
         }
         
         if (!this.playground) {

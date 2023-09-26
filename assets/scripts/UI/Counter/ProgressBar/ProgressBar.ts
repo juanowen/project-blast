@@ -1,5 +1,5 @@
 import { _decorator, Component, Node, warn, UITransform, Label, Tween, tween, Size, size, v3, director, Director } from 'cc';
-import { GameManager } from '../../../GameManager';
+import { GameSettingsEventTarget, GameSettingsEventType } from '../../../GameSettings';
 import { GameValuesDictionary } from '../../../GameValuesDictionary';
 import { IGameSettings, IGameValue } from '../../../interfaces/game';
 import { IProgressBarView } from '../../../interfaces/ui';
@@ -51,7 +51,11 @@ export class ProgressBar extends Counter implements IProgressBarView {
 
         const func = isOn ? 'on' : 'off';
 
-        GameManager.eventTarget[func](GameManager.EventType.GameInitialized, this.onGameInitialized, this);
+        GameSettingsEventTarget[func](
+            GameSettingsEventType.BroadcastSettings, 
+            this.onBroadcastSettings, 
+            this
+        );
         this.node[func](Node.EventType.SIZE_CHANGED, this.onSizeChanged, this);
     }
 
@@ -95,7 +99,7 @@ export class ProgressBar extends Counter implements IProgressBarView {
             .start();
     }
 
-    onGameInitialized(settings: IGameSettings) {
+    onBroadcastSettings(settings: IGameSettings) {
         this._maxValue = settings.hasOwnProperty(this.maxValuePropName) ? settings[this.maxValuePropName] : 0;
 
         this._updateLabelString();

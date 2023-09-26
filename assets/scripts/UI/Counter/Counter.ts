@@ -1,8 +1,7 @@
 import { _decorator, Component, Node, Label, Tween, tween, warn, director, Director, Enum,  } from 'cc';
 import { GameValueType } from '../../enums/GameValueType';
-import { GameManager } from '../../GameManager';
 import { GameValuesDictionary } from '../../GameValuesDictionary';
-import { IGameSettings, IGameValue } from '../../interfaces/game';
+import { IGameValue } from '../../interfaces/game';
 import { ICounterView } from '../../interfaces/ui';
 const { ccclass, property } = _decorator;
 

@@ -1,6 +1,5 @@
-import { _decorator, Component, Node } from 'cc';
-import { GameValueType } from '../../../enums/GameValueType';
-import { GameManager } from '../../../GameManager';
+import { _decorator } from 'cc';
+import { GameSettingsEventTarget, GameSettingsEventType } from '../../../GameSettings';
 import { GameValuesDictionary } from '../../../GameValuesDictionary';
 import { IGameSettings, IGameValue } from '../../../interfaces/game';
 import { ICountDownView } from '../../../interfaces/ui';
@@ -23,7 +22,11 @@ export class CountDown extends Counter implements ICountDownView {
 
         const func = isOn ? 'on' : 'off';
 
-        GameManager.eventTarget[func](GameManager.EventType.GameInitialized, this.onGameInitialized, this);
+        GameSettingsEventTarget[func](
+            GameSettingsEventType.BroadcastSettings, 
+            this.onBroadcastSettings, 
+            this
+        );
     }
     
     onGameValuesChanged(data: IGameValue[]) {
@@ -33,7 +36,7 @@ export class CountDown extends Counter implements ICountDownView {
         this._animateLabelString();
     }
     
-    onGameInitialized(settings: IGameSettings) {
+    onBroadcastSettings(settings: IGameSettings) {
         this._maxValue = settings.hasOwnProperty(this.maxValuePropName) ? settings[this.maxValuePropName] : 0;
         this.currentValue = this._maxValue;
 

@@ -36,7 +36,6 @@ export interface IGameValue {
 }
 
 export interface IGameManager {
-    settings: IGameSettings,
     currentState: GameState
 }
 

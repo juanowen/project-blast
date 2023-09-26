@@ -4,8 +4,8 @@ import { TileType } from '../../enums/TileType';
 import { BasicTile } from '../Tile/BasicTile';
 import { TileFactory } from './TileFactory';
 import { BasicTileConfig, BasicTileDictionary } from '../../Dictionaries/BasicTileDictionary';
-import { GameManager } from '../../GameManager';
 import { IGameSettings } from '../../interfaces/game';
+import { GameSettingsEventTarget, GameSettingsEventType } from '../../GameSettings';
 const { ccclass, property } = _decorator;
 
 interface ConfigWeightPair {
@@ -40,7 +40,11 @@ export class BasicTileFactory extends TileFactory {
     _handleSubscriptions(isOn: boolean) {
         const func = isOn ? 'on' : 'off';
 
-        GameManager.eventTarget[func](GameManager.EventType.GameInitialized, this.onGameInitialized, this);
+        GameSettingsEventTarget[func](
+            GameSettingsEventType.BroadcastSettings, 
+            this.onBroadcastSettings, 
+            this
+        );
     }
 
     _calculateWeights() {
@@ -77,7 +81,7 @@ export class BasicTileFactory extends TileFactory {
         return tile;
     }
 
-    onGameInitialized(settings: IGameSettings) {
+    onBroadcastSettings(settings: IGameSettings) {
         this.dictionary.configs.splice(settings.tileTypesCount);
         this._calculateWeights();
     }

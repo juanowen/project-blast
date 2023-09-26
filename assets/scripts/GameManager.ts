@@ -1,9 +1,9 @@
 import { _decorator, Component, warn, EventTarget, director } from 'cc';
 import { GameState } from './enums/GameState';
 import { GameValueType } from './enums/GameValueType';
-import { GameSettings } from './GameSettings';
+import { GameSettings, GameSettingsEventTarget, GameSettingsEventType } from './GameSettings';
 import { GameValuesDictionary } from './GameValuesDictionary';
-import { IGameManager, IGameSettings, IGameValue } from './interfaces/game';
+import { IGameManager } from './interfaces/game';
 import { Playground } from './Playground/Playground';
 import { PlaygroundRenderer } from './Renderer/PlaygroundRenderer';
 import { SceneSwitcher } from './UI/SceneSwitcher';
@@ -11,7 +11,6 @@ const { ccclass, property } = _decorator;
 
 const gameEventTarget = new EventTarget();
 export enum GameEvent {
-    GameInitialized,
     GameStateChanged,
     NextGameState
 };
@@ -22,8 +21,6 @@ export class GameManager extends Component implements IGameManager {
     public static eventTarget: EventTarget = gameEventTarget;
     public static EventType: typeof GameEvent = GameEvent;
 
-    @property({ type: GameSettings })
-    settings: GameSettings = null;
     @property({ type: Playground })
     playgroundManager: Playground = null;
     @property({ type: PlaygroundRenderer })
@@ -35,28 +32,23 @@ export class GameManager extends Component implements IGameManager {
         gameEventTarget.emit(GameEvent.GameStateChanged, this._currentState);
         this.onCurrentStateChanged();
     }
+
+    private _settings: GameSettings = null;
     private _currentState: GameState = GameState.Initialization;
 
     start() {
-        gameEventTarget.emit(GameEvent.GameInitialized, this.settings);
-
-        if (!this.settings) {
-            warn(`GameManager's game settings can't be empty!`);
-            this.enabled = false;
-        }
-
         if (!this.playgroundRenderer) {
             warn(`GameManager's playground renderer can't be empty!`);
             this.enabled = false;
         } else {
-            this.playgroundRenderer.init(this.settings);
+            this.playgroundRenderer.init(this._settings);
         }
 
         if (!this.playgroundManager) {
             warn(`GameManager's playground manager can't be empty!`);
             this.enabled = false;
         } else {
-            this.playgroundManager.init(this.settings);
+            this.playgroundManager.init(this._settings);
         }
         this.onNextGameState();
     }
@@ -73,6 +65,11 @@ export class GameManager extends Component implements IGameManager {
         const func = isOn ? 'on' : 'off';
 
         gameEventTarget[func](GameEvent.NextGameState, this.onNextGameState, this);
+        GameSettingsEventTarget[func](
+            GameSettingsEventType.BroadcastSettings,
+            this.onBroadcastSettings,
+            this
+        );
     }
 
     onCurrentStateChanged() {
@@ -122,9 +119,6 @@ export class GameManager extends Component implements IGameManager {
                 break;
             case GameState.Filling: 
             case GameState.Shuffling: 
-                // this.playgroundRenderer.reorderSiblings();
-                // this.currentState = GameState.Analysis;
-                // break;
                 this.playgroundRenderer.reorderSiblings();
                 this.currentState = GameState.Analysis;
                 break;
@@ -154,11 +148,11 @@ export class GameManager extends Component implements IGameManager {
         const points = GameValuesDictionary.getValue(GameValueType.Points);
         const shuffleCount = GameValuesDictionary.getValue(GameValueType.ShuffleCount);
 
-        if (points >= this.settings.pointsGoal && turns <= this.settings.maxTurnsCount) {
+        if (points >= this._settings.pointsGoal && turns <= this._settings.maxTurnsCount) {
             this.currentState = GameState.Win;
             return;
         }
-        if (shuffleCount > this.settings.maxShuffleCount) {
+        if (shuffleCount > this._settings.maxShuffleCount) {
             this.currentState = GameState.Lose;
             GameValuesDictionary.eventTarget.emit(
                 GameValuesDictionary.EventType.UpdateValue,
@@ -167,7 +161,7 @@ export class GameManager extends Component implements IGameManager {
             );
             return;
         }
-        if (turns === this.settings.maxTurnsCount && points < this.settings.pointsGoal) {
+        if (turns === this._settings.maxTurnsCount && points < this._settings.pointsGoal) {
             this.currentState = GameState.Lose;
             GameValuesDictionary.eventTarget.emit(
                 GameValuesDictionary.EventType.UpdateValue,
@@ -176,6 +170,10 @@ export class GameManager extends Component implements IGameManager {
             );
             return;
         }
+    }
+
+    onBroadcastSettings(settings: GameSettings) {
+        this._settings = settings;
     }
 }
 
