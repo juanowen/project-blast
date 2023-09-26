@@ -32,9 +32,11 @@ export class GameSettings extends Component implements IGameSettings {
     minValidGroupSize: number = 2;
     @property
     animationsDuration: number = 0.35;
+    @property
+    tileTypesCount: number = 5;
 
     onLoad() {
-		game.addPersistRootNode(this.node);
+		  game.addPersistRootNode(this.node);
     }
 }
 

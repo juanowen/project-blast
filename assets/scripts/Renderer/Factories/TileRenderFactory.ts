@@ -16,9 +16,6 @@ export class TileRenderFactory extends Component implements IFactory<ITile, ITil
         const renderNode = instantiate(this.renderPrefab);
         const render = renderNode.getComponent(TileRender);
 
-        // render.x = tile.x;
-        // render.y = tile.y;
-        // render.tileType = tile.tileType;
         render.model = tile;
 
         return render;

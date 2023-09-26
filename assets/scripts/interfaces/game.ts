@@ -14,6 +14,8 @@ export interface IGameSettings {
     maxShuffleCount: number,
     minValidGroupSize: number,
 
+    tileTypesCount: number,
+
     animationsDuration: number
 }
 

@@ -1,4 +1,4 @@
-import { Label, UITransform } from "cc";
+import { Component, Label, UITransform } from "cc";
 import { IGameSettings, IGameValue } from "./game";
 
 export interface ICounterView {

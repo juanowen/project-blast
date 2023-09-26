@@ -6,8 +6,8 @@ import { SceneSwitcher } from '../../UI/SceneSwitcher';
 import { InputCommand } from './InputCommand';
 const { ccclass, property } = _decorator;
 
-@ccclass('StartInputCommand')
-export class StartInputCommand extends InputCommand implements IInputCommand {
+@ccclass('StartButtonInputCommand')
+export class StartButtonInputCommand extends InputCommand implements IInputCommand {
     onTouchEnd(event: EventTouch) {
         
         GameValuesDictionary.eventTarget.emit(

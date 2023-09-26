@@ -126,7 +126,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "RestartInputCommand",
+    "_name": "RestartButtonInputCommand",
     "_objFlags": 0,
     "_parent": {
       "__id__": 3

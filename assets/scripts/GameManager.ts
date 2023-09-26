@@ -38,6 +38,8 @@ export class GameManager extends Component implements IGameManager {
     private _currentState: GameState = GameState.Initialization;
 
     start() {
+        gameEventTarget.emit(GameEvent.GameInitialized, this.settings);
+
         if (!this.settings) {
             warn(`GameManager's game settings can't be empty!`);
             this.enabled = false;
@@ -56,8 +58,6 @@ export class GameManager extends Component implements IGameManager {
         } else {
             this.playgroundManager.init(this.settings);
         }
-
-        gameEventTarget.emit(GameEvent.GameInitialized, this.settings);
         this.onNextGameState();
     }
 

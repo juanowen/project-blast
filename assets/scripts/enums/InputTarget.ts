@@ -3,5 +3,7 @@ export enum InputTarget {
     Tile,
     StartButton,
     RestartButton,
-    SettingsButton
+    SettingsButton,
+    IncrementButton,
+    DecrementButton
 }
