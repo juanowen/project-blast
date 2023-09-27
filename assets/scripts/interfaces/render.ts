@@ -1,4 +1,4 @@
-import { Color, Component, Node, Size, SpriteFrame, Vec2, Vec3 } from "cc";
+import { Color, Component, Node, Prefab, Size, SpriteFrame, Vec2, Vec3 } from "cc";
 import { IGameSettings, ITypeFactoryPair } from "./game";
 import { IPlayground } from "./playground";
 import { ITile } from "./tile";
@@ -19,6 +19,8 @@ export interface ITileRender extends IRender {
     appear(duration: number, callback: Function): void,
     remove(duration: number, callback: Function): void,
     move(duration: number, callback: Function): void,
+
+    setFirstPosition(position: Vec2): void
 }
 
 export interface IPlaygroundRenderer {
@@ -47,4 +49,8 @@ export interface ITileRenderGenerator {
 export interface IBasicTileRenderConfig {
     tileColor: Color,
     tileSprite: SpriteFrame
+}
+
+export interface IBoosterTileRenderConfig {
+    prefab: Prefab
 }

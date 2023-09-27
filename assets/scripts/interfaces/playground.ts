@@ -31,7 +31,8 @@ export interface IPlaygroundFiller {
     tileGenerator: ITileGenerator,
     init(playground: IPlayground): void,
     fillPlayground(): void,
-    generateTile(tileType: TileType): ITile
+    generateTile(tileType: TileType, initInfo?: any): ITile
+    upgradeTile(tile: ITile, newTileType: TileType): void
 }
 export interface IPlaygroundGroupsManager {
     groups: Set<ITileGroup>,

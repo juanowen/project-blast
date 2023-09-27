@@ -47,7 +47,7 @@ export class BasicTileFactory extends TileFactory {
         );
     }
 
-    _calculateWeights() {
+    _generatePairs() {
         this._pairs = [];
         this._fullWeight = 0;
 
@@ -83,7 +83,7 @@ export class BasicTileFactory extends TileFactory {
 
     onBroadcastSettings(settings: IGameSettings) {
         this.dictionary.configs.splice(settings.tileTypesCount);
-        this._calculateWeights();
+        this._generatePairs();
     }
 }
 

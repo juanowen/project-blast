@@ -8,7 +8,7 @@ export class TileFactory extends Component implements IFactory<null, ITile> {
     @property
     tilePoints: number = 10;
     
-    getInstance(): ITile {
+    getInstance(initInfo?: any): ITile {
         return null;
     }
 }

@@ -34,6 +34,8 @@ export class RenderFactory extends Component implements IFactory<any, IRender> {
     }
 
     _handleSubscriptions(isOn: boolean) {
+        if (!this.renderPrefab) return;
+
         const func = isOn ? 'on' : 'off';
 
         GameSettingsEventTarget[func](

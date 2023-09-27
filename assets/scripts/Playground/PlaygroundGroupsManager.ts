@@ -1,4 +1,5 @@
 import { Component, _decorator } from 'cc';
+import { TileType } from '../enums/TileType';
 import { GameManager } from '../GameManager';
 import { IGameSettings } from '../interfaces/game';
 import { IGroupPlayground, IPlaygroundGroupsManager } from '../interfaces/playground';
@@ -43,17 +44,21 @@ export class PlaygroundGroupsManager extends Component implements IPlaygroundGro
     }
 
     hasValidGroups(): boolean {
-        return Array.from(this.groups).some(group => group.length >= this._minValidGroupSize);
+        return Array.from(this.groups).some(group => group.length >= this._minValidGroupSize)
+            || [...this._playground.tileMap.values()].some(tile => tile.tileType === TileType.Booster);
     }
 
     collapseGroup(startTile: ITile) {
-        if (startTile.group.length < this._minValidGroupSize) return;
+        if (startTile.group.length < this._minValidGroupSize 
+            && startTile.tileType !== TileType.Booster) return;
 
         const group = startTile.group;
         const multiplier = 1 + (group.length - 1) * 0.15;
+        
+        this._playground.filler.upgradeTile(startTile, TileType.Booster);
+        
         group.tileSet.forEach((tile: ITile) => {
             tile.collapse(this._playground, multiplier);
-            this._playground.deleteTile(tile);
         });
         
         GameManager.eventTarget.emit(GameManager.EventType.NextGameState);

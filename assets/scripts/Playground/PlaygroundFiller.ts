@@ -42,8 +42,16 @@ export class PlaygroundFiller extends Component implements IPlaygroundFiller {
         }
     }
 
-    generateTile(tileType: TileType): ITile {
-        return this.tileGenerator.generateTile(tileType);
+    generateTile(tileType: TileType, initInfo?: any): ITile {
+        return this.tileGenerator.generateTile(tileType, initInfo);
+    }
+
+    upgradeTile(tile: ITile, newTileType: TileType) {
+        const newTile = this.generateTile(newTileType, tile);
+        if (newTile) {
+            tile.group.delete(tile);
+            this._playground.addTile(newTile, tile.x, tile.y);
+        }
     }
 }
 

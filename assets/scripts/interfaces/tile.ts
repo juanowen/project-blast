@@ -21,6 +21,9 @@ export interface ITile {
 export interface IBasicTile extends ITile {
     colorType: number
 }
+export interface IBoosterTile extends ITile {
+    boosterType: number
+}
 
 export interface ITileScheme {
     tileType: TileType,
@@ -28,6 +31,9 @@ export interface ITileScheme {
 }
 export interface IBasicTileScheme extends ITileScheme {
     colorType: number
+}
+export interface IBoosterTileScheme extends ITileScheme {
+    boosterType: number
 }
 
 export interface ITileGroup {
@@ -44,6 +50,6 @@ export interface ITileGroup {
 export interface ITileGenerator {
     configs: ITypeFactoryPair[],
 
-    generateTile(tileType: TileType): ITile
+    generateTile(tileType: TileType, initInfo?: any): ITile
 }
 

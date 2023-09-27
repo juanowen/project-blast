@@ -25,13 +25,15 @@ export class Tile implements ITile {
         this.points = scheme.points;
     }
 
-    collapse (playground: IPlayground, multiplier: number = 1) {
+    collapse(playground: IPlayground, multiplier: number = 1) {
         const points = Math.floor(this.points * multiplier);
         GameValuesDictionary.eventTarget.emit(
             GameValuesDictionary.EventType.IncrementValue, 
             GameValueType.Points,
             points
         );
+
+        playground.deleteTile(this);
     }
 }
 

@@ -1,4 +1,4 @@
-import { _decorator, Color, Node, SpriteFrame, Sprite, warn, tween, Vec3, Vec2, Tween, UITransform, v3, v2, Size } from 'cc';
+import { _decorator, Color, Node, SpriteFrame, Sprite, warn, tween, Vec3, Vec2, Tween, UITransform, v3, v2, Size, Enum } from 'cc';
 import { EffectType } from '../enums/EffectType';
 import { ITileRender } from '../interfaces/render';
 import { ITile } from '../interfaces/tile';
@@ -11,6 +11,8 @@ const { ccclass, property } = _decorator;
 export class TileRender extends PoolObject implements ITileRender {
     @property({ type: Sprite })
     renderSprite: Sprite = null;
+    @property({ type: Enum(EffectType) })
+    collapseEffect: EffectType = EffectType.None;
 
     public model: ITile = null;
     public lastPosition: Vec2 = Vec2.ZERO;
@@ -78,13 +80,8 @@ export class TileRender extends PoolObject implements ITileRender {
 
     remove(duration: number, callback: Function) {
         this.node.setSiblingIndex(1000);
-        
-        EffectManager.eventTarget.emit(
-            EffectManager.EventType.SpawnEffect, 
-            EffectType.TileExplosion, 
-            this.getWorldCenter(),
-            this
-        );
+
+        this._spawnCollapseEffect();
 
         this._scaleTween && this._scaleTween.stop();
         this._scaleTween = tween(this.renderSprite.node)
@@ -118,6 +115,17 @@ export class TileRender extends PoolObject implements ITileRender {
         return v3(x * this._transform.width, y * this._transform.height);
     }
 
+    private _spawnCollapseEffect() {
+        if (this.collapseEffect !== EffectType.None) {
+            EffectManager.eventTarget.emit(
+                EffectManager.EventType.SpawnEffect, 
+                this.collapseEffect, 
+                this.getWorldCenter(),
+                this
+            );
+        }
+    }
+
     getWorldCenter(): Vec3 {
         const size = this._transform.contentSize;
         const scale = this.node.worldScale;
@@ -138,6 +146,10 @@ export class TileRender extends PoolObject implements ITileRender {
             size.width * scale.x,
             size.height * scale.y
         );
+    }
+
+    setFirstPosition(position: Vec2) {
+        this.lastPosition = position;
     }
 }
 

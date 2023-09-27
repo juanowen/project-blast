@@ -81,7 +81,7 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
                     let render = this._prevRenderMap.get(tile);
                     if (!render) {
                         render = this.generator.generateRender(tile);
-                        render.lastPosition = v2(tile.x, tile.y + this.playground.height / 2);
+                        render.setFirstPosition(v2(tile.x, tile.y + this.playground.height / 2));
                         render.size = this._settings.blockSize;
 
                         this._locateRender(render);

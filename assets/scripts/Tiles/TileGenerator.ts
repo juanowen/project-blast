@@ -18,10 +18,10 @@ export class TileGenerator extends Component implements ITileGenerator {
     @property({ type: [TileGeneratorConfig] })
     configs: TileGeneratorConfig[] = [];
 
-    generateTile(tileType: TileType) {
+    generateTile(tileType: TileType, initInfo?: any) {
         const config = this.configs.find(config => config.type === tileType);
         if (config) {
-            return config.factory.getInstance();
+            return config.factory.getInstance(initInfo);
         }
 
         return null;
