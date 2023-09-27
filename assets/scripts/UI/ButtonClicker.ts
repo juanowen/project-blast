@@ -31,6 +31,7 @@ export class ButtonClicker extends Component {
 
         this.node[func](Node.EventType.TOUCH_START, this.onTouchStart, this);
         this.node[func](Node.EventType.TOUCH_END, this.onTouchEnd, this);
+        this.node[func](Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this);
     }
 
     onTouchStart() {
