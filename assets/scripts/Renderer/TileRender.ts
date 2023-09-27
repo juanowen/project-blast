@@ -1,10 +1,12 @@
-import { _decorator, Color, Node, Component, SpriteFrame, Sprite, warn, tween, Vec3, Vec2, Tween, UITransform, v3, v2, Size } from 'cc';
+import { _decorator, Color, Node, SpriteFrame, Sprite, warn, tween, Vec3, Vec2, Tween, UITransform, v3, v2, Size } from 'cc';
 import { ITileRender } from '../interfaces/render';
 import { ITile } from '../interfaces/tile';
+import { PoolManager } from '../Pool/PoolManager';
+import { PoolObject } from '../Pool/PoolObject';
 const { ccclass, property } = _decorator;
 
 @ccclass('TileRender')
-export class TileRender extends Component implements ITileRender {
+export class TileRender extends PoolObject implements ITileRender {
     @property({ type: Sprite })
     renderSprite: Sprite = null;
 
@@ -49,6 +51,10 @@ export class TileRender extends Component implements ITileRender {
         }
 
         this._transform = this.node.getComponent(UITransform);
+    }
+
+    unuse() {
+        this.color = new Color(255, 255, 255);
         this.renderSprite.node.scale = Vec3.ZERO;
     }
 
@@ -72,7 +78,7 @@ export class TileRender extends Component implements ITileRender {
             .to(duration, { scale: Vec3.ZERO }, {
                 easing: 'backIn',
                 onComplete: () => {
-                    this.node.destroy();
+                    PoolManager.eventTarget.emit(PoolManager.EventType.ReturnToPool, this.node);
                     callback();
                 }
             })

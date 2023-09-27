@@ -1,7 +1,9 @@
 import { _decorator, warn } from 'cc';
 import { BasicTileDictionary } from '../../Dictionaries/BasicTileDictionary';
+import { GameSettings } from '../../GameSettings';
 import { IBasicTileRenderConfig } from '../../interfaces/render';
 import { IBasicTile, ITile } from '../../interfaces/tile';
+import { PoolManager } from '../../Pool/PoolManager';
 import { TileRender } from '../TileRender';
 import { TileRenderFactory } from './TileRenderFactory';
 const { ccclass, property } = _decorator;
@@ -28,6 +30,14 @@ export class BasicTileRenderFactory extends TileRenderFactory {
         }
 
         return render;
+    }
+
+    onBroadcastSettings(settings: GameSettings) {
+        PoolManager.eventTarget.emit(
+            PoolManager.EventType.CreatePoolFor, 
+            this.renderPrefab, 
+            settings.playgroundSize.width * settings.playgroundSize.height
+        );
     }
 }
 
