@@ -1310,12 +1310,12 @@
   },
   {
     "__type__": "ResizePreset",
-    "resizeMode": 3,
+    "resizeMode": 2,
     "positionType": 2,
-    "_width": "80vh",
+    "_width": "90vh",
     "_height": "90vh",
     "_x": "5vh",
-    "_y": "5vh"
+    "_y": "50vh-50sh"
   },
   {
     "__type__": "ResizePreset",

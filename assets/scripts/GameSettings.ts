@@ -45,6 +45,12 @@ export class GameSettings extends Component implements IGameSettings {
     }
 
     onEnable() {
+        if (this.playgroundSize.height > this.playgroundSize.width) {
+            const height = this.playgroundSize.height;
+            this.playgroundSize.height = this.playgroundSize.width;
+            this.playgroundSize.width = height;
+        }
+
         GameSettingsEventTarget.emit(GameSettingsEventType.BroadcastSettings, this);
     }
 }
