@@ -15,13 +15,13 @@ export class TileRenderFactory extends Component implements IFactory<ITile, ITil
     getInstance(tile: ITile): TileRender {
         if (!this.renderPrefab) return null;
 
+        let render = null;
         PoolManager.eventTarget.emit(PoolManager.EventType.GetFromPool, this.renderPrefab, (renderNode: Node) => {
-            const render = renderNode.getComponent(TileRender);
-
+            render = renderNode.getComponent(TileRender);
             render.model = tile;
-    
-            return render;
         });
+        
+        return render;
     }
 
     onEnable() {

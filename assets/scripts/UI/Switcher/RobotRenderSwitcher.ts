@@ -1,4 +1,4 @@
-import { _decorator, Component, warn, Sprite, SpriteFrame } from 'cc';
+import { _decorator, Component, warn, Animation, AnimationClip } from 'cc';
 import { GameValueType } from '../../enums/GameValueType';
 import { GameValuesDictionary } from '../../GameValuesDictionary';
 import { IGameValue } from '../../interfaces/game';
@@ -6,17 +6,20 @@ const { ccclass, property } = _decorator;
 
 @ccclass('RobotRenderSwitcher')
 export class RobotRenderSwitcher extends Component {
-    @property({ type: Sprite })
-    renderSprite: Sprite = null;
-    @property({ type: SpriteFrame })
-    winnerFrame: SpriteFrame = null;
-    @property({ type: SpriteFrame })
-    loserFrame: SpriteFrame = null;
+    @property({ type: Animation })
+    animation: Animation = null;
+    @property({ type: AnimationClip })
+    winnerClip: AnimationClip = null;
+    @property({ type: AnimationClip })
+    loserClip: AnimationClip = null;
 
     onLoad() {
-        if (!this.renderSprite) {
-            warn(`RobotRenderSwitcher's render sprite can't be empty!`);
+        if (!this.animation) {
+            warn(`RobotRenderSwitcher's animation can't be empty!`);
             this.enabled = false;
+        } else {
+            this.animation.clips[0] = this.winnerClip;
+            this.animation.clips[1] = this.loserClip;
         }
     }
 
@@ -40,7 +43,11 @@ export class RobotRenderSwitcher extends Component {
 
     onGameValuesChanged(data: IGameValue[]) {
         const playerLost = GameValuesDictionary.getValueFromData(GameValueType.PlayerLost, data) as boolean;
-        this.renderSprite.spriteFrame = playerLost ? this.loserFrame : this.winnerFrame;
+        if (playerLost) {
+            this.loserClip && this.animation.play(this.loserClip.name);
+        } else {
+            this.winnerClip && this.animation.play(this.winnerClip.name);
+        }
     }
 }
 
