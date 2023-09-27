@@ -1,7 +1,7 @@
 import { _decorator, Component, warn, Sprite, SpriteFrame } from 'cc';
-import { GameValueType } from '../enums/GameValueType';
-import { GameValuesDictionary } from '../GameValuesDictionary';
-import { IGameValue } from '../interfaces/game';
+import { GameValueType } from '../../enums/GameValueType';
+import { GameValuesDictionary } from '../../GameValuesDictionary';
+import { IGameValue } from '../../interfaces/game';
 const { ccclass, property } = _decorator;
 
 @ccclass('RobotRenderSwitcher')

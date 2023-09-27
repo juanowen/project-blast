@@ -2,7 +2,7 @@ import { _decorator, EventTouch, director } from 'cc';
 import { GameValueType } from '../../enums/GameValueType';
 import { GameValuesDictionary } from '../../GameValuesDictionary';
 import { IInputCommand } from '../../interfaces/input';
-import { SceneSwitcher } from '../../UI/SceneSwitcher';
+import { SceneSwitcher } from '../../UI/Switcher/SceneSwitcher';
 import { InputCommand } from './InputCommand';
 const { ccclass, property } = _decorator;
 
