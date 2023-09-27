@@ -6,7 +6,7 @@ import { GameValuesDictionary } from './GameValuesDictionary';
 import { IGameManager } from './interfaces/game';
 import { Playground } from './Playground/Playground';
 import { PlaygroundRenderer } from './Renderer/PlaygroundRenderer';
-import { SceneSwitcher } from './UI/SceneSwitcher';
+import { SceneSwitcher } from './UI/Switcher/SceneSwitcher';
 const { ccclass, property } = _decorator;
 
 const gameEventTarget = new EventTarget();
