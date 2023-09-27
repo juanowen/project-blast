@@ -1,8 +1,10 @@
 import { _decorator, Color, Node, SpriteFrame, Sprite, warn, tween, Vec3, Vec2, Tween, UITransform, v3, v2, Size } from 'cc';
+import { EffectType } from '../enums/EffectType';
 import { ITileRender } from '../interfaces/render';
 import { ITile } from '../interfaces/tile';
 import { PoolManager } from '../Pool/PoolManager';
 import { PoolObject } from '../Pool/PoolObject';
+import { EffectManager } from './Effects/EffectManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('TileRender')
@@ -27,11 +29,15 @@ export class TileRender extends PoolObject implements ITileRender {
         return this._getLocalCoords(this.lastPosition.x, this.lastPosition.y);
     }
     
+    get color(): Color {
+        return this.renderSprite.color;
+    }
     set color(value: Color) {
         if (this.renderSprite) {
             this.renderSprite.color = value;
         }
     }
+    
     set spriteFrame(value: SpriteFrame) {
         if (this.renderSprite) {
             this.renderSprite.spriteFrame = value;
@@ -54,7 +60,7 @@ export class TileRender extends PoolObject implements ITileRender {
     }
 
     unuse() {
-        this.color = new Color(255, 255, 255);
+        this.color = Color.WHITE;
         this.renderSprite.node.scale = Vec3.ZERO;
     }
 
@@ -72,6 +78,13 @@ export class TileRender extends PoolObject implements ITileRender {
 
     remove(duration: number, callback: Function) {
         this.node.setSiblingIndex(1000);
+        
+        EffectManager.eventTarget.emit(
+            EffectManager.EventType.SpawnEffect, 
+            EffectType.TileExplosion, 
+            this.getWorldCenter(),
+            this
+        );
 
         this._scaleTween && this._scaleTween.stop();
         this._scaleTween = tween(this.renderSprite.node)
@@ -103,6 +116,28 @@ export class TileRender extends PoolObject implements ITileRender {
 
     private _getLocalCoords(x: number, y: number): Vec3 {
         return v3(x * this._transform.width, y * this._transform.height);
+    }
+
+    getWorldCenter(): Vec3 {
+        const size = this._transform.contentSize;
+        const scale = this.node.worldScale;
+        const position = this.node.worldPosition;
+        const anchor = this._transform.anchorPoint;
+
+        return v3(
+            position.x + size.width * (0.5 - anchor.x) * scale.x,
+            position.y + size.height * (0.5 - anchor.y) * scale.y
+        );
+    }
+
+    getWorldSize(): Size {
+        const size = this._transform.contentSize;
+        const scale = this.node.worldScale;
+
+        return new Size(
+            size.width * scale.x,
+            size.height * scale.y
+        );
     }
 }
 

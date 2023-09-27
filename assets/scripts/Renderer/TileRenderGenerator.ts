@@ -1,15 +1,15 @@
 import { _decorator, Component, Enum, Node } from 'cc';
 import { TileType } from '../enums/TileType';
-import { ITileTypeFactoryPair } from '../interfaces/game';
+import { ITypeFactoryPair } from '../interfaces/game';
 import { ITileRender, ITileRenderGenerator } from '../interfaces/render';
 import { ITile } from '../interfaces/tile';
 import { TileRenderFactory } from './Factories/TileRenderFactory';
 const { ccclass, property } = _decorator;
 
 @ccclass('TileRenderGeneratorConfig')
-class TileRenderGeneratorConfig implements ITileTypeFactoryPair {
+class TileRenderGeneratorConfig implements ITypeFactoryPair {
     @property({ type: Enum(TileType) })
-    tileType: TileType = TileType.None;
+    type: TileType = TileType.None;
     @property({ type: TileRenderFactory })
     factory: TileRenderFactory = null;
 }
@@ -20,7 +20,7 @@ export class TileRenderGenerator extends Component implements ITileRenderGenerat
     configs: TileRenderGeneratorConfig[] = [];
 
     generateRender(tile: ITile): ITileRender {
-        const config = this.configs.find(config => config.tileType === tile.tileType);
+        const config = this.configs.find(config => config.type === tile.tileType);
         if (config) {
             return config.factory.getInstance(tile);
         }

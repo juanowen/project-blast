@@ -47,6 +47,8 @@ export class Playground extends Component implements IPlayground, IGroupPlaygrou
         } else {
             warn(`Playground's shuffler can't be empty!`);
         }
+        
+        window['debug'] = this
     }
 
     addTile(tile: ITile, x: number, y: number) {

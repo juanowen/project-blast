@@ -25,17 +25,17 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 12
-      },
-      {
         "__id__": 14
       },
       {
         "__id__": 16
+      },
+      {
+        "__id__": 18
       }
     ],
     "_prefab": {
-      "__id__": 18
+      "__id__": 20
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -80,11 +80,11 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 9
+        "__id__": 11
       }
     ],
     "_prefab": {
-      "__id__": 11
+      "__id__": 13
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -129,10 +129,13 @@
       },
       {
         "__id__": 6
+      },
+      {
+        "__id__": 8
       }
     ],
     "_prefab": {
-      "__id__": 8
+      "__id__": 10
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -235,6 +238,30 @@
     "fileId": "75SxOR/VBMSpGE8JU9869R"
   },
   {
+    "__type__": "27d0cdp4NhINrBIL6AGjzuO",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 3
+    },
+    "_enabled": true,
+    "__prefab": {
+      "__id__": 9
+    },
+    "glanceMaterial": {
+      "__uuid__": "53743873-c5ed-4375-8a9c-bb55d127ca9a",
+      "__expectedType__": "cc.Material"
+    },
+    "targetSprite": {
+      "__id__": 6
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.CompPrefabInfo",
+    "fileId": "5d4bYewXlO4KJTyhzCID+s"
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
@@ -253,7 +280,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 10
+      "__id__": 12
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -290,7 +317,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 13
+      "__id__": 15
     },
     "_contentSize": {
       "__type__": "cc.Size",
@@ -317,7 +344,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 15
+      "__id__": 17
     },
     "renderSprite": {
       "__id__": 6
@@ -337,11 +364,11 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 17
+      "__id__": 19
     },
     "target": 1,
     "helperComponent": {
-      "__id__": 14
+      "__id__": 16
     },
     "_id": ""
   },

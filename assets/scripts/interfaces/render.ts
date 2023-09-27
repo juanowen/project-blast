@@ -1,5 +1,5 @@
 import { Color, Component, Node, Size, SpriteFrame, Vec2, Vec3 } from "cc";
-import { IGameSettings, ITileTypeFactoryPair } from "./game";
+import { IGameSettings, ITypeFactoryPair } from "./game";
 import { IPlayground } from "./playground";
 import { ITile } from "./tile";
 
@@ -7,9 +7,6 @@ export interface IRender {
     node: Node,
     color: Color,
     size: Size,
-    
-    appear(duration: number, callback: Function): void,
-    remove(duration: number, callback: Function): void,
 }
 export interface ITileRender extends IRender {
     model: ITile,
@@ -19,6 +16,8 @@ export interface ITileRender extends IRender {
     localPosition: Vec3,
     lastLocalPosition: Vec3,
 
+    appear(duration: number, callback: Function): void,
+    remove(duration: number, callback: Function): void,
     move(duration: number, callback: Function): void,
 }
 
@@ -40,7 +39,7 @@ export interface IRenderAnimator {
 }
 
 export interface ITileRenderGenerator {
-    configs: ITileTypeFactoryPair[],
+    configs: ITypeFactoryPair[],
 
     generateRender(tile: ITile): ITileRender
 }

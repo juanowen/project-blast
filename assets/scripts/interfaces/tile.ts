@@ -1,6 +1,6 @@
 import { _decorator } from 'cc';
 import { TileType } from '../enums/TileType';
-import { ITileTypeFactoryPair } from './game';
+import { ITypeFactoryPair } from './game';
 import { IPlayground, IPlaygroundGroupsManager } from './playground';
 
 export interface ITile {
@@ -42,7 +42,7 @@ export interface ITileGroup {
 }
 
 export interface ITileGenerator {
-    configs: ITileTypeFactoryPair[],
+    configs: ITypeFactoryPair[],
 
     generateTile(tileType: TileType): ITile
 }

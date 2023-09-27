@@ -1,4 +1,4 @@
-import { Size } from "cc"
+import { Enum, Size } from "cc"
 import { GameState } from "../enums/GameState"
 import { GameValueType } from "../enums/GameValueType"
 import { TileType } from "../enums/TileType"
@@ -39,8 +39,8 @@ export interface IGameManager {
     currentState: GameState
 }
 
-export interface ITileTypeFactoryPair {
-    tileType: TileType,
+export interface ITypeFactoryPair {
+    type: number,
     factory: IFactory<any, any>
 }
 
