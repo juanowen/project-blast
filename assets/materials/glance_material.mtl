@@ -30,6 +30,7 @@
       "interval": 4,
       "speed": 0.5,
       "start_shift": 1,
+      "lerp_coef": 0.4,
       "lerp_pow": 2.5
     }
   ]

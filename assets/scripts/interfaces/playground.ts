@@ -11,8 +11,10 @@ export interface IPlayground {
 
     addTile(tile: ITile, x: number, y: number): void
     deleteTile(tile: ITile): void,
+
     getTile(x: number, y: number): ITile, 
     hasTile(tile: ITile): boolean, 
+
     clear(): void,
     refill(): void
 }
@@ -29,13 +31,16 @@ export interface IGroupPlayground extends IPlayground {
 
 export interface IPlaygroundFiller {
     tileGenerator: ITileGenerator,
+    
     init(playground: IPlayground): void,
     fillPlayground(): void,
+
     generateTile(tileType: TileType, initInfo?: any): ITile
     upgradeTile(tile: ITile, newTileType: TileType): void
 }
 export interface IPlaygroundGroupsManager {
     groups: Set<ITileGroup>,
+
     init(playground: IGroupPlayground, settings: IGameSettings): void,
     collapseGroup(startTile: ITile): void
 }

@@ -27,7 +27,7 @@ export interface IPlaygroundRenderer {
     renderNode: Node,
     playground: IPlayground,
     animator: IRenderAnimator,
-    generator: ITileRenderGenerator,
+    generator: IRenderGenerator,
 
     init(settings: IGameSettings): void,
     redraw(): void,
@@ -40,7 +40,7 @@ export interface IRenderAnimator {
     processQueues(): void
 }
 
-export interface ITileRenderGenerator {
+export interface IRenderGenerator {
     configs: ITypeFactoryPair[],
 
     generateRender(tile: ITile): ITileRender

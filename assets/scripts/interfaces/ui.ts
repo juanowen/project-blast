@@ -21,3 +21,22 @@ export interface IProgressBarView extends ICounterView {
 
     onBroadcastSettings(settings: IGameSettings): void
 }
+
+export interface IPropertyEditBox {
+    valueLabel: Label,
+    propertyName: string,
+    
+    _getPropertyValue(): void,
+    _setPropertyValue(): void,
+
+    onBroadcastSettings(settings: IGameSettings): void
+}
+
+export interface INumberEditBox extends IPropertyEditBox {
+    stepValue: number,
+    minValue: number,
+    maxValue: number,
+
+    incrementValue(): void,
+    decrementValue(): void
+}

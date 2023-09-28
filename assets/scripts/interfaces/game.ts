@@ -1,7 +1,6 @@
-import { Enum, Size } from "cc"
+import { Size } from "cc"
 import { GameState } from "../enums/GameState"
 import { GameValueType } from "../enums/GameValueType"
-import { TileType } from "../enums/TileType"
 
 export interface IGameSettings {
     playgroundSize: Size,

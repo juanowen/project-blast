@@ -1,9 +1,10 @@
 import { _decorator, Component, Node, Label, warn } from 'cc';
 import { GameSettings, GameSettingsEventTarget, GameSettingsEventType } from '../GameSettings';
+import { INumberEditBox } from '../interfaces/ui';
 const { ccclass, property } = _decorator;
 
 @ccclass('SettingsEditBox')
-export class SettingsEditBox extends Component {
+export class SettingsEditBox extends Component implements INumberEditBox {
     @property({ type: Label })
     valueLabel: Label = null;
     @property
@@ -15,7 +16,7 @@ export class SettingsEditBox extends Component {
     @property
     maxValue: number = 1; 
 
-    private _settings: GameSettings = null;
+    private _data: GameSettings = null;
     private _value: number = 0;
 
     start() {
@@ -29,8 +30,8 @@ export class SettingsEditBox extends Component {
         if (this.propertyName.length === 0) {
             warn(`SettingsEditBox's property name can't be empty!`);
             this.enabled = false;
-        } else if (this._settings) {
-            const value = this._getSettingsValue(); 
+        } else if (this._data) {
+            const value = this._getPropertyValue(); 
             if (value === null) {
                 warn(`Game settings doesn't have property with name "${this.propertyName}"!`);
                 this.enabled = false;
@@ -65,9 +66,9 @@ export class SettingsEditBox extends Component {
         );
     }
 
-    _getSettingsValue() {
+    _getPropertyValue() {
         const pathArray = this.propertyName.split('.');
-        let result = this._settings;
+        let result = this._data;
         pathArray.forEach(pathPart => {
             if (!result.hasOwnProperty(pathPart.trim())) return null;
             result = result[pathPart.trim()];
@@ -76,9 +77,9 @@ export class SettingsEditBox extends Component {
         return result;
     }
 
-    _setSettingsValue() {
+    _setPropertyValue() {
         const pathArray = this.propertyName.split('.');
-        let property = this._settings;
+        let property = this._data;
 
         let i = 0;
         for (i; i < pathArray.length - 1; ++i) {
@@ -92,7 +93,7 @@ export class SettingsEditBox extends Component {
         if (this._value % 1 !== 0) {
             this._value = Math.round(this._value * 100) / 100;
         }
-        withRecord && this._setSettingsValue();
+        withRecord && this._setPropertyValue();
         this.valueLabel.string = this._value.toString().replace('.', ',');
     }
 
@@ -107,7 +108,7 @@ export class SettingsEditBox extends Component {
     }
 
     onBroadcastSettings(settings: GameSettings) {
-        this._settings = settings;
+        this._data = settings;
     }
 }
 

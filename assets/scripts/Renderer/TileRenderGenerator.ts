@@ -1,7 +1,7 @@
 import { _decorator, Component, Enum, Node } from 'cc';
 import { TileType } from '../enums/TileType';
 import { ITypeFactoryPair } from '../interfaces/game';
-import { ITileRender, ITileRenderGenerator } from '../interfaces/render';
+import { ITileRender, IRenderGenerator } from '../interfaces/render';
 import { ITile } from '../interfaces/tile';
 import { TileRenderFactory } from './Factories/TileRenderFactory';
 const { ccclass, property } = _decorator;
@@ -15,7 +15,7 @@ class TileRenderGeneratorConfig implements ITypeFactoryPair {
 }
 
 @ccclass('TileRenderGenerator')
-export class TileRenderGenerator extends Component implements ITileRenderGenerator {
+export class TileRenderGenerator extends Component implements IRenderGenerator {
     @property({ type: [TileRenderGeneratorConfig] })
     configs: TileRenderGeneratorConfig[] = [];
 
