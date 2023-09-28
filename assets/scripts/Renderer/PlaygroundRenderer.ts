@@ -85,11 +85,11 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
                         render.size = this._settings.blockSize;
 
                         this._locateRender(render);
-                        this.animator.addToAnimationQueue(render as TileRender, render.appear.bind(render));
+                        this.animator.addToAnimationQueue(render as TileRender, 'appear', render);
                     } 
 
                     if (!render.lastLocalPosition.equals(render.localPosition)) {
-                        this.animator.addToAnimationQueue(render as TileRender, render.move.bind(render));
+                        this.animator.addToAnimationQueue(render as TileRender, 'move', render);
                     }
 
                     newRenderMap.set(tile, render);
@@ -99,7 +99,7 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
         }
 
         this._prevRenderMap.forEach(render => {
-            this.animator.addToAnimationQueue(render as TileRender, render.remove.bind(render));
+            this.animator.addToAnimationQueue(render as TileRender, 'remove', render);
         });
         this._prevRenderMap = newRenderMap;
 
@@ -107,7 +107,7 @@ export class PlaygroundRenderer extends Component implements IPlaygroundRenderer
     }
 
     reorderSiblings() {
-        [...this._prevRenderMap.values()].forEach(render => {
+        this._prevRenderMap.forEach(render => {
             render.node.setSiblingIndex(render.localPosition.y);
         });
     }

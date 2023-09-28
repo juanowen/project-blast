@@ -12,7 +12,7 @@ export class PlaygroundShuffler extends Component implements IPlaygroundShuffler
     }
 
     shuffle() {
-        const tiles = [...this._playground.tileMap.values()];
+        const tiles = Array.from(this._playground.tileMap.values());
         this._playground.clear();
         
         for (let x = 0; x < this._playground.width; ++x) {

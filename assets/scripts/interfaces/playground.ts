@@ -41,7 +41,7 @@ export interface IPlaygroundGroupsManager {
 }
 export interface IPlaygroundShuffler {
     init(playground: IShufflePlayground): void,
-    shuffle(playground: IPlayground): void
+    shuffle(): void
 }
 
 

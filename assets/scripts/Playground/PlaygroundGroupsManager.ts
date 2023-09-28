@@ -23,7 +23,7 @@ export class PlaygroundGroupsManager extends Component implements IPlaygroundGro
         this.groups.clear();
         this._playground.tileMap.forEach((tile: ITile) => { tile.group = null });
 
-        const tiles = [...this._playground.tileMap.values()];
+        const tiles = Array.from(this._playground.tileMap.values());
         tiles.sort((a, b) => (a.y * this._playground.width + a.x) - (b.y * this._playground.width + b.x));
 
         tiles.forEach((tile: ITile) => {
@@ -45,7 +45,7 @@ export class PlaygroundGroupsManager extends Component implements IPlaygroundGro
 
     hasValidGroups(): boolean {
         return Array.from(this.groups).some(group => group.length >= this._minValidGroupSize)
-            || [...this._playground.tileMap.values()].some(tile => tile.tileType === TileType.Booster);
+            || Array.from(this._playground.tileMap.values()).some(tile => tile.tileType === TileType.Booster);
     }
 
     collapseGroup(startTile: ITile) {

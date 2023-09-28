@@ -571,18 +571,18 @@
   },
   {
     "__type__": "ResizePreset",
-    "resizeMode": 2,
+    "resizeMode": 1,
     "positionType": 0,
     "_width": "100vw+10px",
-    "_height": "0px",
+    "_height": "100vh+10px",
     "_x": "0px",
     "_y": "0px"
   },
   {
     "__type__": "ResizePreset",
-    "resizeMode": 3,
+    "resizeMode": 1,
     "positionType": 0,
-    "_width": "0px",
+    "_width": "100vw+10px",
     "_height": "100vh+10px",
     "_x": "0px",
     "_y": "0px"

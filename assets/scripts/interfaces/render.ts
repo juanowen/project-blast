@@ -36,7 +36,7 @@ export interface IPlaygroundRenderer {
 
 export interface IRenderAnimator {
     init(settings: IGameSettings): void,
-    addToAnimationQueue(component: Component, func: Function): void,
+    addToAnimationQueue(component: Component, funcName: string, context: IRender): void,
     processQueues(): void
 }
 

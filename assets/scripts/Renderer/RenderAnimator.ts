@@ -1,7 +1,7 @@
 import { _decorator, Component } from 'cc';
 import { GameManager } from '../GameManager';
 import { IGameSettings } from '../interfaces/game';
-import { IRenderAnimator, } from '../interfaces/render';
+import { IRender, IRenderAnimator, } from '../interfaces/render';
 const { ccclass, property } = _decorator;
 
 @ccclass('RenderAnimator')
@@ -13,14 +13,16 @@ export class RenderAnimator extends Component implements IRenderAnimator {
         this._animationsDuration = settings.animationsDuration;
     }
 
-    addToAnimationQueue(component: Component, func: Function) {
-        const animId = `${component.uuid}_${func.name}`;
+    addToAnimationQueue(component: Component, funcName: string, context: IRender) {
+        if (!(context[funcName] instanceof Function)) return;
+
+        const animId = `${component.uuid}_${funcName}`;
         this._animationQueue.set(
             animId,
             () => {
-                func(this._animationsDuration, () => {
+                context[funcName](this._animationsDuration, () => {
                     this._checkIfReady(animId);
-                })
+                });
             }
         );
     }
