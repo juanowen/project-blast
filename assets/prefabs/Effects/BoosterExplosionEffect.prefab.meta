@@ -2,12 +2,12 @@
   "ver": "1.1.38",
   "importer": "prefab",
   "imported": true,
-  "uuid": "f7e61565-263c-4146-a138-09ccc6e6a0ba",
+  "uuid": "13c3a098-4a8c-4ff6-b09c-d5e464e95909",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "ExplosionEffect"
+    "syncNodeName": "BoosterExplosionEffect"
   }
 }

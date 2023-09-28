@@ -11,10 +11,10 @@ export class TileExplosionEffectFactory extends EffectRenderFactory {
     _prepareRender(renderNode: Node, emitData: TileRender): EffectRender {
         const render = super._prepareRender(renderNode, emitData);
 
-        const dimention = emitData.getWorldSize().width / 20;
+        const dimension = emitData.getWorldSize().width / 20;
 
         render.color = emitData.color;
-        render.size = size(dimention, dimention);
+        render.size = size(dimension, dimension);
         
         return render;
     }
