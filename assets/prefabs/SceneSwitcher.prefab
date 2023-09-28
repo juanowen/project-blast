@@ -403,19 +403,19 @@
   },
   {
     "__type__": "ResizePreset",
-    "resizeMode": 1,
+    "resizeMode": 2,
     "positionType": 2,
-    "_width": "100vw",
+    "_width": "100vw+10px",
     "_height": "100vh",
     "_x": "50vw",
     "_y": "50vh"
   },
   {
     "__type__": "ResizePreset",
-    "resizeMode": 1,
+    "resizeMode": 3,
     "positionType": 2,
     "_width": "100vw",
-    "_height": "100vh",
+    "_height": "100vh+10px",
     "_x": "50vw",
     "_y": "50vh"
   },
